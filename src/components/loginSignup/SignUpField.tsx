@@ -19,9 +19,9 @@ const SignUpField: React.FC = () => {
     const { isEmailAvailableLoading, isEmailAvailableErr, isEmailAvailable: isEmailAvailableResult } = isEmailAvailable;
     // CONTEXT END
 
-
     const [email, setEmail] = React.useState<string>('');
     const [password, setPassword] = useState('');
+    const [touched, setTouched] = useState(false);
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
     const [isValidEmail, setIsValidEmail] = useState(false);
@@ -45,20 +45,22 @@ const SignUpField: React.FC = () => {
 
     // password validity
     useEffect(() => {
-        if (password.length < 12 || !/[!@#$%^&*]/.test(password)) {
-            setPasswordError('Password must be at least 12 characters and include at least one special character.');
-            setIsPasswordValid(false);
-        } else {
-            setPasswordError('');
-            setIsPasswordValid(true);
-        }
+        if (touched) {
+            if (password.length < 12 || !/[!@#$%^&*]/.test(password)) {
+                setPasswordError('Password must be at least 12 characters and include at least one special character.');
+                setIsPasswordValid(false);
+            } else {
+                setPasswordError('');
+                setIsPasswordValid(true);
+            }
 
-        if (confirmPassword && password !== confirmPassword) {
-            setConfirmPasswordError('Passwords do not match.');
-        } else {
-            setConfirmPasswordError('');
+            if (confirmPassword && password !== confirmPassword) {
+                setConfirmPasswordError('Passwords do not match.');
+            } else {
+                setConfirmPasswordError('');
+            }
         }
-    }, [password, confirmPassword]);
+    }, [password, confirmPassword, touched]);
 
     // when signUpLoading changes and signUpSuccess is true, it redirects to login after 3 seconds
     useEffect(() => {
@@ -119,6 +121,7 @@ const SignUpField: React.FC = () => {
                             onChange={(e) => setPassword(e.target.value)}
                             error={Boolean(passwordError)}
                             helperText={passwordError}
+                            onBlur={() => setTouched(true)}
                             InputProps={{
                                 endAdornment: (
                                     <InputAdornment position="end">
