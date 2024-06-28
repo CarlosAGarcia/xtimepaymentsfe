@@ -4,14 +4,14 @@ import { useNavigate } from 'react-router-dom';
 
 const LoginButton: React.FC = () => {
     const navigate = useNavigate();
-
+    const loggedIn = !!localStorage.getItem('token')
     const handleLoginClick = () => {
-        navigate('/login');
+        navigate(loggedIn ? '/dashboard' : '/login');
     };
 
     return (
         <Button variant="outlined" style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleLoginClick}>
-            LOGIN
+            {loggedIn ? 'APP' : 'LOGIN'}
         </Button>
     );
 };
