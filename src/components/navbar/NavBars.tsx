@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import { SwipeableDrawer, List, ListItem, ListItemText } from '@mui/material';
+import { SwipeableDrawer } from '@mui/material';
 import TopNavBar from './TopNavBar';
+import LeftSideBar from './LeftSideBar';
+import RightSideBar from './RightSideBar';
 
 // both side bar + nav bar components
 const NavBars: React.FC = () => {
@@ -14,21 +16,6 @@ const NavBars: React.FC = () => {
     setState({ ...state, [anchor]: open });
   };
 
-  const list = (anchor: string) => (
-    <div
-      role="presentation"
-      onClick={toggleDrawer(anchor, false)}
-      onKeyDown={toggleDrawer(anchor, false)}
-    >
-      <List>
-        {['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-    </div>
-  );
 
 
   return (
@@ -44,16 +31,18 @@ const NavBars: React.FC = () => {
         onClose={toggleDrawer('left', false)}
         onOpen={toggleDrawer('left', true)}
       >
-        {list('left')}
+        <LeftSideBar/>
       </SwipeableDrawer>
+
       <SwipeableDrawer
         anchor={'right'}
         open={state['right']}
         onClose={toggleDrawer('right', false)}
         onOpen={toggleDrawer('right', true)}
       >
-        {list('right')}
+        <RightSideBar/>
       </SwipeableDrawer>
+
     </React.Fragment>
   );
 };

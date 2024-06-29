@@ -5,7 +5,6 @@ import { UserContext } from '../../contexts/users/users';
 import { slideOut, slideIn } from '../../styling/styling'
 
 let source: any;
-
 const LoginField: React.FC = () => {
     // 'global' state - context
     const userContext = useContext(UserContext);
@@ -20,7 +19,7 @@ const LoginField: React.FC = () => {
 
     // on mount it sets up the axios cancel token and cancels reqs if unmounts
     useEffect(() => {
-        if (!source) source = axios.CancelToken.source();
+        source = axios.CancelToken.source();
         return () => {
             if (source) source.cancel('Unmounting component');
         };
