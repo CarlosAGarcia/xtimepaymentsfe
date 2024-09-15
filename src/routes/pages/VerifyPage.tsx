@@ -23,14 +23,14 @@ const VerifyPage = () => {
         // checks if the token is a valid token (eg. not expired and present in the database)
         if (token) {
             // sends a request to /api/auth/verify with the token
-            axios.get(`${REACT_APP_API_URL}/api/auth/verify?token=${token}`)
+            axios.get(`${REACT_APP_API_URL}/api/auth/verify/${token}`)
                 .then((response) => {
-                    setIsValidToken(response.data.isValid);
+                    setIsValidToken({ isValid: true, message: response?.data?.message });
                     setIsLoading(false);
                 })
                 .catch((error) => {
                     console.error('Error verifying token:', error);
-                    const errorMessage = error.response.data.message;
+                    const errorMessage = error.response?.data?.error || error?.message || 'There was an error verifying your account. Please try again.';
                     setError(errorMessage);
                     setIsLoading(false);
                 });
@@ -42,19 +42,20 @@ const VerifyPage = () => {
 
     // if isValidToken.isValid is true, redirect to /dashboard in 3 seconds, also update the state var countdown every second
     useEffect(() => {
-        if (isValidToken.isValid) {
+        if (isValidToken?.isValid) {
             // updates the countdown every second
             const interval = setInterval(() => {
                 setCountdown(prevCountdown => prevCountdown - 1);
                 if (countdown === 0) {
-                    navigate('/dashboard');
+                   // replaces the url with http://localhost:3001/dashboard
+                   window.location.href = '/dashboard';
                 }
             }, 1000);
 
 
             return () => clearInterval(interval);
         }
-    }, [ isValidToken.isValid, navigate, countdown ]); 
+    }, [ isValidToken?.isValid, navigate, countdown ]); 
 
 
     if (isLoading) {
@@ -69,11 +70,17 @@ const VerifyPage = () => {
     }
     
     if (error) {
-        return <div>{error}</div>;
+        return <div>
+            <h1>There was an error verifying your account.</h1>
+            {error}
+        </div>;
     }
 
     if (!isValidToken.isValid) {
-        return <div>{isValidToken.message}</div>;
+        return <div>
+            <h1>There was an error verifying your account.</h1>
+            {isValidToken.message}
+        </div>;
     }
 
     return (

@@ -10,7 +10,7 @@ const LoginField: React.FC = () => {
     const userContext = useContext(UserContext);
     if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
     const { isEmailAvailable, getIsEmailAvailable, loginVars, login } = userContext;
-    const { loginSuccess: isLoginSuccess, loginLoading: isLoginLoading, loginErr: isLoginErr } = loginVars;
+    const { loginSuccess: isLoginSuccess, loginLoading: isLoginLoading, loginErr } = loginVars;
     const { isEmailAvailableLoading, isEmailAvailableErr, isEmailAvailable: isEmailAvailableResult } = isEmailAvailable;
 
     // local state
@@ -89,7 +89,7 @@ const LoginField: React.FC = () => {
                 <Button variant="contained" fullWidth sx={{ mb: 2 }} onClick={onPassSubmit}>
                     {isLoginLoading ? 'LOADING...' : 'Submit'}
                 </Button> 
-                { isLoginErr && <p>There was an error logging in. Please try again.</p>}
+                { loginErr && <p>{loginErr}</p>}
                 { isLoginSuccess && <p><p>Logged in successfully!</p><Link href="#" sx={{ mx: 1 }}>Click here if you're not redirected</Link></p>}
             </Box>
             }

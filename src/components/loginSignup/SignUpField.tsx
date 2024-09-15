@@ -61,7 +61,7 @@ const SignUpField: React.FC = () => {
             }
         }
     }, [password, confirmPassword, touched]);
-
+    
     // when signUpLoading changes and signUpSuccess is true, it redirects to login after 3 seconds
     // useEffect(() => {
     //     if (!signUpLoading) {
@@ -151,10 +151,10 @@ const SignUpField: React.FC = () => {
                             variant="contained"
                             fullWidth
                             sx={{ mb: 2 }}
-                            disabled={!isPasswordValid || password !== confirmPassword}
+                            disabled={signUpLoading || !isPasswordValid || password !== confirmPassword}
                             onClick={onSignup}
                         >
-                            Submit
+                            {signUpLoading ? 'LOADING...' : 'Submit'}
                         </Button>
  
                         { signUpSuccess && (
@@ -163,6 +163,12 @@ const SignUpField: React.FC = () => {
                                     <p> Sign up successful! Please check your email for a verification link.</p>
                                  </div>
                             </>
+                        )}
+
+                        { signUpErr && (
+                            <div className='verifyText'>
+                                <p>{signUpErr}</p>
+                            </div>
                         )}
 
                     </>

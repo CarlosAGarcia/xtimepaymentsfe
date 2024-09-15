@@ -17,11 +17,11 @@ interface UserContextType {
 
     // Sign up
     signUp: (vars: { email: string, password: string }, source?: any) => void;
-    signUpVars: { signUpSuccess: boolean, signUpLoading: boolean, signUpErr: boolean };
+    signUpVars: { signUpSuccess: boolean, signUpLoading: boolean, signUpErr: string };
 
     // LOGIN
     login: (vars: { email: string, password: string }, source?: any) => void;
-    loginVars: { loginSuccess: boolean, loginLoading: boolean, loginErr: boolean };
+    loginVars: { loginSuccess: boolean, loginLoading: boolean, loginErr: string };
 }
 
 const { REACT_APP_API_URL } = process.env
@@ -51,28 +51,23 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Signs up user - /api/auth/signup - POST
     // updates the state vars for signUp - { signUpSuccess, signUpLoading, signUpErr }
-    const [{ signUpSuccess, signUpLoading, signUpErr }, setSignUp ] = useState<{ signUpSuccess: boolean, signUpLoading: boolean, signUpErr: boolean }>({ signUpSuccess: false, signUpLoading: false, signUpErr: false });
+    const [{ signUpSuccess, signUpLoading, signUpErr }, setSignUp ] = useState<{ signUpSuccess: boolean, signUpLoading: boolean, signUpErr: string }>({ signUpSuccess: false, signUpLoading: false, signUpErr: '' });
     const signUp = async (vars: { email: string, password: string }, source?: any) => {
         try {
             const { email, password } = vars;
-            setSignUp({ signUpSuccess: false, signUpLoading: true, signUpErr: false });
+            setSignUp({ signUpSuccess: false, signUpLoading: true, signUpErr: '' });
             await axios.post(`${REACT_APP_API_URL}/api/auth/signup`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
-                    console.log("Sign up response:", response.data);
-                    setSignUp({ signUpSuccess: true, signUpLoading: false, signUpErr: false });
-
-                    // // saves response.data.token to local storage
-                    // localStorage.setItem('token', response.data.token);
-                    localStorage.setItem('email', email);
+                    setSignUp({ signUpSuccess: true, signUpLoading: false, signUpErr: '' });
                 })
                 .catch((error) => {
-                    setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: true });
+                    setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: error?.response?.data?.message || 'Something went wrong' });
                     console.error("Error signing up:", error);
                 })
         }
         catch (error) {
-            console.error('Error fetching data:', error);
-            setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: true });
+            setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: 'Something went wrong' });
+            console.error("Error signing up:", error);
         }
     };
    
@@ -87,7 +82,6 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
             setIsUserErr(false);
             await axios.get(`${REACT_APP_API_URL}/api/users/${id}`)
                 .then((response) => {
-                    console.log("User fetched:", response.data);
                     setIsUserLoading(false);
                     setUser(response.data);
                 })
@@ -105,27 +99,27 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // logs in user - /api/auth/login - POST
     // updates the state vars for login - { loginSuccess, loginLoading, loginErr }
-    const [{ loginSuccess, loginLoading, loginErr }, setLogin ] = useState<{ loginSuccess: boolean, loginLoading: boolean, loginErr: boolean }>({ loginSuccess: false, loginLoading: false, loginErr: false });
+    const [{ loginSuccess, loginLoading, loginErr }, setLogin ] = useState<{ loginSuccess: boolean, loginLoading: boolean, loginErr: string }>({ loginSuccess: false, loginLoading: false, loginErr: '' });
     const login = async (vars: { email: string, password: string }, source?: any) => {
         try {
             const { email, password } = vars;
-            setLogin({ loginSuccess: false, loginLoading: true, loginErr: false });
+            setLogin({ loginSuccess: false, loginLoading: true, loginErr: '' });
             await axios.post(`${REACT_APP_API_URL}/api/auth/login`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
                     console.log("Login response:", response.data);
-                    setLogin({ loginSuccess: true, loginLoading: false, loginErr: false });
+                    setLogin({ loginSuccess: true, loginLoading: false, loginErr: '' });
 
                     // saves response.data.token to local storage
                     localStorage.setItem('token', response.data.token);
                 })
                 .catch((error) => {
-                    setLogin({ loginSuccess: false, loginLoading: false, loginErr: true });
+                    setLogin({ loginSuccess: false, loginLoading: false, loginErr: error?.response?.data?.message || 'Something went wrong' });
                     console.error("Error logging in:", error);
                 })
         }
         catch (error) {
             console.error('Error fetching data:', error);
-            setLogin({ loginSuccess: false, loginLoading: false, loginErr: true });
+            setLogin({ loginSuccess: false, loginLoading: false, loginErr: 'Something went wrong. Please try again.' });
         }
     }
 
