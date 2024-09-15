@@ -63,16 +63,17 @@ const SignUpField: React.FC = () => {
     }, [password, confirmPassword, touched]);
 
     // when signUpLoading changes and signUpSuccess is true, it redirects to login after 3 seconds
-    useEffect(() => {
-        if (signUpLoading) {
-            setTimeout(() => {
-                if (signUpSuccess) {
-                   // redirect to /dashboard
-                   navigate('/dashboard')
-                }
-            }, 3000);
-        }
-    }, [signUpLoading, signUpSuccess, navigate]);
+    // useEffect(() => {
+    //     if (!signUpLoading) {
+    //         const token = localStorage.getItem('token');
+    //         if (signUpSuccess && token) {
+    //             setTimeout(() => {
+    //                 // redirect to /dashboard
+    //                 navigate('/dashboard')
+    //             }, 3000);
+    //         }
+    //     }
+    // }, [navigate, signUpLoading, signUpSuccess])
 
     const onContinueClick = () => {
         if (isValidEmail) {
@@ -155,13 +156,15 @@ const SignUpField: React.FC = () => {
                         >
                             Submit
                         </Button>
-
+ 
                         { signUpSuccess && (
                             <>
-                                <p>Sign up successful! Redirecting to login...</p>
-                                <Link href="/dashboard" sx={{ mx: 1 }}>or click here if you're not redirected</Link>
+                                <div className='verifyText'>
+                                    <p> Sign up successful! Please check your email for a verification link.</p>
+                                 </div>
                             </>
                         )}
+
                     </>
                 )}
         </>

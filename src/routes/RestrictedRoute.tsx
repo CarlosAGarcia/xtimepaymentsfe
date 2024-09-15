@@ -1,6 +1,6 @@
 // src/routes/RestrictedRoute.tsx
 import React from 'react';
-import { Route, Navigate } from 'react-router-dom';
+import { Navigate } from 'react-router-dom';
 import RestrictedLayout from './restrictedPages/RestrictedLayout';
 
 interface RestrictedRouteProps {

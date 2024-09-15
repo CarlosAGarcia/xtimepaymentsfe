@@ -24,6 +24,7 @@ interface UserContextType {
     loginVars: { loginSuccess: boolean, loginLoading: boolean, loginErr: boolean };
 }
 
+const { REACT_APP_API_URL } = process.env
 const UserContext = createContext<UserContextType | undefined>(undefined);
 const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
 
@@ -32,7 +33,7 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     const getIsEmailAvailable = async (email: string, source?: any) => {
         try {
             setIsEmailAvailable({ isEmailAvailable: false, isEmailAvailableLoading: true, isEmailAvailableErr: false });
-            await axios.post(`http://localhost:3001/api/users/login/isEmailAvailable/`, { email }, { cancelToken: source?.token })
+            await axios.post(`${REACT_APP_API_URL}/api/users/login/isEmailAvailable/`, { email }, { cancelToken: source?.token })
                 .then((response) => {
                     console.log("Email fetched:", response.data);
                     setIsEmailAvailable({ isEmailAvailable: response.data.isEmailAvailable, isEmailAvailableLoading: false, isEmailAvailableErr: false });
@@ -55,13 +56,14 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const { email, password } = vars;
             setSignUp({ signUpSuccess: false, signUpLoading: true, signUpErr: false });
-            await axios.post(`http://localhost:3001/api/auth/signup`, { email, password }, { cancelToken: source?.token })
+            await axios.post(`${REACT_APP_API_URL}/api/auth/signup`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
                     console.log("Sign up response:", response.data);
                     setSignUp({ signUpSuccess: true, signUpLoading: false, signUpErr: false });
 
-                    // saves response.data.token to local storage
-                    localStorage.setItem('token', response.data.token);
+                    // // saves response.data.token to local storage
+                    // localStorage.setItem('token', response.data.token);
+                    localStorage.setItem('email', email);
                 })
                 .catch((error) => {
                     setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: true });
@@ -83,7 +85,7 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             setIsUserLoading(true);
             setIsUserErr(false);
-            await axios.get(`http://localhost:3001/api/users/${id}`)
+            await axios.get(`${REACT_APP_API_URL}/api/users/${id}`)
                 .then((response) => {
                     console.log("User fetched:", response.data);
                     setIsUserLoading(false);
@@ -108,7 +110,7 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
         try {
             const { email, password } = vars;
             setLogin({ loginSuccess: false, loginLoading: true, loginErr: false });
-            await axios.post(`http://localhost:3001/api/auth/login`, { email, password }, { cancelToken: source?.token })
+            await axios.post(`${REACT_APP_API_URL}/api/auth/login`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
                     console.log("Login response:", response.data);
                     setLogin({ loginSuccess: true, loginLoading: false, loginErr: false });
