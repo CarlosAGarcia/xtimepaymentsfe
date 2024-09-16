@@ -25,6 +25,9 @@ const VerifyPage = () => {
             // sends a request to /api/auth/verify with the token
             axios.get(`${REACT_APP_API_URL}/api/auth/verify/${token}`)
                 .then((response) => {
+                    // sets token in local storage
+                    localStorage.setItem('token', token);
+
                     setIsValidToken({ isValid: true, message: response?.data?.message });
                     setIsLoading(false);
                 })
