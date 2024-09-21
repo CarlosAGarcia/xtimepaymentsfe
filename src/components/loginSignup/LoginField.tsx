@@ -71,11 +71,12 @@ const LoginField: React.FC = () => {
 
     return (
         <Box sx={{ width: '100%' }}>
+            <form action="/login" method="POST">
             {!showPassword ? <Box sx={{
                 width: '100%',
                 ...(animationClass === 'slide-out' ? { animation: `${slideOut} 0.5s forwards` } : {}),
             }}>
-                <TextField label="Email address" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangeEmail}/>
+                <TextField autoComplete='email' label="Email" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangeEmail}/>
                 <Button variant="contained" fullWidth sx={{ mb: 2 }} onClick={onContinueClick}>
                     {isEmailAvailableLoading ? 'LOADING...' : 'Continue'}
                 </Button> 
@@ -85,7 +86,7 @@ const LoginField: React.FC = () => {
                 width: '100%',
                 ...(animationClass === 'slide-in' ? { animation: `${slideIn} 0.5s forwards` } : {}),
             }}>
-                <TextField value={password} label="Password" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangePass}/>
+                <TextField autoComplete='password' value={password} label="Password" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangePass}/>
                 <Button variant="contained" fullWidth sx={{ mb: 2 }} onClick={onPassSubmit}>
                     {isLoginLoading ? 'LOADING...' : 'Submit'}
                 </Button> 
@@ -93,6 +94,7 @@ const LoginField: React.FC = () => {
                 { isLoginSuccess && <p><p>Logged in successfully!</p><Link href="#" sx={{ mx: 1 }}>Click here if you're not redirected</Link></p>}
             </Box>
             }
+            </form>
         </Box>
     );
 };

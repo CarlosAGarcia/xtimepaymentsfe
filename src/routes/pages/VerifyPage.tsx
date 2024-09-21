@@ -60,7 +60,6 @@ const VerifyPage = () => {
         }
     }, [ isValidToken?.isValid, navigate, countdown ]); 
 
-
     if (isLoading) {
         return <div>
             {/* please wait while we verify your account - with pretty animation for loading */}

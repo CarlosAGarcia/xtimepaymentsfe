@@ -1,12 +1,16 @@
 import React from 'react';
-import { Box, Button, Link } from '@mui/material';
+import { Box, Button, Divider, Link } from '@mui/material';
 import GoogleIcon from '@mui/icons-material/Google';
 import AppleIcon from '@mui/icons-material/Apple';
 import MicrosoftIcon from '@mui/icons-material/Apple';
 
 const ThirdPartyAuth: React.FC = () => {
+    const isThirdPartyAuthEnblbed = false;
+    if (!isThirdPartyAuthEnblbed) return null;
     return (
         <>
+            <Divider sx={{ width: '100%', mb: 2 }}>OR</Divider>
+
             <Button variant="outlined" fullWidth sx={{ mb: 1 }} startIcon={<GoogleIcon />}>
                 Continue with Google
             </Button>
