@@ -1,13 +1,13 @@
 import React, { ReactNode } from 'react';
 // import { DataProvider } from './DataProvider';
-import { UserContextProvider } from './users/users';
+import { AuthContextProvider } from './auth/authContext';
 
 const MainProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     // <DataProvider>
-      <UserContextProvider>
+      <AuthContextProvider>
         {children}
-      </UserContextProvider>
+      </AuthContextProvider>
     // </DataProvider>
   );
 };

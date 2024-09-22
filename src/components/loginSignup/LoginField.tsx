@@ -1,13 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Link, TextField } from '@mui/material';
 import axios from 'axios';
-import { UserContext } from '../../contexts/users/users';
+import { AuthContext } from '../../contexts/auth/authContext';
 import { slideOut, slideIn } from '../../styling/styling'
 
 let source: any;
 const LoginField: React.FC = () => {
     // 'global' state - context
-    const userContext = useContext(UserContext);
+    const userContext = useContext(AuthContext);
     if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
     const { isEmailAvailable, getIsEmailAvailable, loginVars, login } = userContext;
     const { loginSuccess: isLoginSuccess, loginLoading: isLoginLoading, loginErr } = loginVars;
@@ -61,17 +61,17 @@ const LoginField: React.FC = () => {
     }
 
     // redirects user to the dashboard if login is successful
-    useEffect(() => {
-        if (isLoginSuccess) {
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 2000);
-        }
-    }, [isLoginSuccess]);
+    // useEffect(() => {
+    //     if (isLoginSuccess) {
+    //         setTimeout(() => {
+    //             window.location.href = '/dashboard';
+    //         }, 2000);
+    //     }
+    // }, [isLoginSuccess]);
 
     return (
         <Box sx={{ width: '100%' }}>
-            <form action="/login" method="POST">
+            <form>
             {!showPassword ? <Box sx={{
                 width: '100%',
                 ...(animationClass === 'slide-out' ? { animation: `${slideOut} 0.5s forwards` } : {}),

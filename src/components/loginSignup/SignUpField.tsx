@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, IconButton, InputAdornment, TextField, Link } from '@mui/material';
 import axios from 'axios';
-import { UserContext } from '../../contexts/users/users';
+import { AuthContext } from '../../contexts/auth/authContext';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
@@ -12,7 +12,7 @@ const SignUpField: React.FC = () => {
     const navigate = useNavigate();
 
     // CONTEXT START
-    const userContext = useContext(UserContext);
+    const userContext = useContext(AuthContext);
     if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
     const { isEmailAvailable, getIsEmailAvailable, signUp, signUpVars } = userContext;
     const { signUpSuccess, signUpLoading, signUpErr } = signUpVars;

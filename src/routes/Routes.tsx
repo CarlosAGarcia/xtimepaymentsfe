@@ -10,8 +10,6 @@ import SignUpPage from './pages/SignUpPage';
 import VerifyPage from './pages/VerifyPage';
 
 function AppRoutes() {
-  const isLoggedIn = !!localStorage.getItem('token');
-
   return (
     <Router>
       <Routes>
@@ -21,8 +19,9 @@ function AppRoutes() {
         <Route path="/verify" element={<VerifyPage />} />
 
         <Route path="/signup" element={<SignUpPage />} />
-        <Route path="/dashboard" element={<RestrictedRoute isLoggedIn={isLoggedIn}><Dashboard /></RestrictedRoute>}
-        />
+
+        <Route path="/dashboard" element={<RestrictedRoute component={<Dashboard/>} />} />
+
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

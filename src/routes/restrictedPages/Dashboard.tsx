@@ -1,9 +1,9 @@
 import React, { useContext } from 'react'
 import { Button } from '@mui/material';
-import { UserContext } from '../../contexts/users/users';
+import { AuthContext } from '../../contexts/auth/authContext';
 
 export default function Dashboard() {
-  const userContext = useContext(UserContext);
+  const userContext = useContext(AuthContext);
   if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
 
   const { user, isUserLoading, isUserErr, getUser } = userContext;

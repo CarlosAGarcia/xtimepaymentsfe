@@ -6,9 +6,11 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import InboxIcon from '@mui/icons-material/Inbox';
 import LogoutIcon from '@mui/icons-material/Logout';
+import { useAuth } from '../../contexts/auth/authContext';
 
 
 const RightSideBar = () => {
+    const { logOut } = useAuth()
     const [selectedIndex, setSelectedIndex] = React.useState(1);
 
     const handleListItemClick = (
@@ -18,18 +20,13 @@ const RightSideBar = () => {
       setSelectedIndex(index);
     };
 
-    const handleLogoutClick = () => {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    }
-
     return (
       <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
         <List component="nav" aria-label="main mailbox folders">
   
             <ListItemButton
                 selected={selectedIndex === 0}
-                onClick={handleLogoutClick}
+                onClick={logOut}
             >
 
                 <ListItemIcon>

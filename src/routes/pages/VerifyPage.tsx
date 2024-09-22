@@ -2,11 +2,13 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/auth/authContext';
 
 const REACT_APP_API_URL = process.env.REACT_APP_API_URL;
 
 const VerifyPage = () => {
     const navigate = useNavigate();
+    const { setAccessToken } = useAuth()
 
     // updates the number shown in seconds from 3 to 0
     const [countdown, setCountdown] = useState(3);
@@ -25,10 +27,13 @@ const VerifyPage = () => {
             // sends a request to /api/auth/verify with the token
             axios.get(`${REACT_APP_API_URL}/api/auth/verify/${token}`)
                 .then((response) => {
-                    // sets token in local storage
-                    localStorage.setItem('token', token);
+                    const { accessToken, message } = response?.data;
 
-                    setIsValidToken({ isValid: true, message: response?.data?.message });
+                    // sets token in local storage
+                    setAccessToken(accessToken)
+
+                    // flags for loading and style
+                    setIsValidToken({ isValid: true, message });
                     setIsLoading(false);
                 })
                 .catch((error) => {

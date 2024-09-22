@@ -5,14 +5,14 @@ import Logo from '../../components/home/Logo';
 import LoginField from '../../components/loginSignup/LoginField';
 import GoBackButton from '../../components/buttons/GoBackButton';
 import axios from 'axios';
-import { UserContext } from '../../contexts/users/users';
+import { AuthContext } from '../../contexts/auth/authContext';
 // import { slideOut, slideIn } from '../../styling/styling'
 
 let source: any;
 
 const LoginPage: React.FC = () => {
     // 'global' state - context
-    const userContext = useContext(UserContext);
+    const userContext = useContext(AuthContext);
     if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
     const { isEmailAvailable, getIsEmailAvailable } = userContext;
     const { isEmailAvailableLoading, isEmailAvailableErr, isEmailAvailable: isEmailAvailableResult } = isEmailAvailable;
