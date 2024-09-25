@@ -1,7 +1,7 @@
 // src/routes/RestrictedRoute.tsx
 import React, { useContext } from 'react';
 import { Navigate, Route } from 'react-router-dom';
-import RestrictedLayout from './restrictedPages/RestrictedLayout';
+import RestrictedLayout from '../layouts/RestrictedLayout';
 import { AuthContext } from '../contexts/auth/authContext';
 
 interface RestrictedRouteProps {

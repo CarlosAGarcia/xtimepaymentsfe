@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Tabs, Tab, Box, Typography, Container } from '@mui/material';
+import { Tabs, Tab, Box, Typography } from '@mui/material';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,8 +42,7 @@ const TabPanel = () => {
   };
 
   return (
-    <Container>
-      
+      <>
       <Tabs value={value} onChange={handleChange} aria-label="payment tiers/tokens tabs">
         <Tab label="TIERS" {...a11yProps(0)} />
         <Tab label="TOKENS" {...a11yProps(1)} />
@@ -58,8 +57,7 @@ const TabPanel = () => {
         {/* Content for TOKENS tab */}
         <Typography>This is the TOKENS content.</Typography>
       </TabPanelInner>
-
-    </Container>
+      </>
   );
 }
 

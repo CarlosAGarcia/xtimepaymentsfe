@@ -3,6 +3,8 @@ import { useAuth } from '../../contexts/auth/authContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
 import TabPanel from '../../components/monitization/TabPanel'
 import Header from '../../components/headers/Headers'
+import { Container } from '@mui/material'
+import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 
 export default function Monetization() {
     // gets the user obejct from authContext
@@ -17,11 +19,8 @@ export default function Monetization() {
     }, [user?.organisation?._id])
 
     return (
-        <div>
-            <Header title='MONETIZATION'/>
-
-            {/* renders a table  */}
+        <HeaderContentLayout title='MONETIZATION'>
             <TabPanel />
-        </div>
+        </HeaderContentLayout>
     )
 }
