@@ -6,6 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
 import MonetizationOn from '@mui/icons-material/MonetizationOn';
+import DashboardIcon from '@mui/icons-material/Dashboard';
 import { useLocation } from 'react-router-dom';
 
 const LeftSideBar = () => {
@@ -19,13 +20,13 @@ const LeftSideBar = () => {
   useEffect(() => {
     switch (location.pathname) {
       case '/dashboard':
-        setSelectedIndex(-1);
-        break;
-      case '/monetization':
         setSelectedIndex(0);
         break;
-      default:
+      case '/monetization':
         setSelectedIndex(1);
+        break;
+      default:
+        setSelectedIndex(0);
         break;
     }
   }, [location]);
@@ -33,9 +34,20 @@ const LeftSideBar = () => {
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="main mailbox folders">
-
       <ListItemButton
           selected={selectedIndex === 0}
+          onClick={() => {
+            navigate('/dashboard')
+          }}
+        >
+          <ListItemIcon>
+            <DashboardIcon />
+          </ListItemIcon>
+          <ListItemText primary="DASHBOARD" />
+        </ListItemButton>
+
+      <ListItemButton
+          selected={selectedIndex === 1}
           onClick={() => {
             navigate('/monetization')
           }}

@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { Button } from '@mui/material';
 import { AuthContext } from '../../contexts/auth/authContext';
+import Header from '../../components/headers/Headers';
 
 export default function Dashboard() {
   const userContext = useContext(AuthContext);
@@ -11,14 +12,13 @@ export default function Dashboard() {
   const onClickGetUser = () => {
     getUser('667454409e6bec9484e05b70')
   }
+
   return (
     <div>
-      <div>Dashboard</div>
-      <Button onClick={onClickGetUser} >
-        getUserById
-      </Button>
+      <Header title='DASHBOARD'/>
+
       <div>
-        {isUserLoading ? 'LOADING...' : isUserErr ? 'ERR' : JSON.stringify(user)}
+        {isUserLoading ? 'LOADING...' : isUserErr ? 'ERR' : JSON.stringify(user.email)}
       </div>
     </div>
   )

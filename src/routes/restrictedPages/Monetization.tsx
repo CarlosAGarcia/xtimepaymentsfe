@@ -2,6 +2,7 @@ import React, { useEffect } from 'react'
 import { useAuth } from '../../contexts/auth/authContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
 import TabPanel from '../../components/monitization/TabPanel'
+import Header from '../../components/headers/Headers'
 
 export default function Monetization() {
     // gets the user obejct from authContext
@@ -17,7 +18,8 @@ export default function Monetization() {
 
     return (
         <div>
-            <h1>Monetization</h1>
+            <Header title='MONETIZATION'/>
+
             {/* renders a table  */}
             <TabPanel />
         </div>

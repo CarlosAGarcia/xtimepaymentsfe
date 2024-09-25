@@ -1,17 +1,22 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../../contexts/auth/authContext';
 
 const LoginButton: React.FC = () => {
     const navigate = useNavigate();
-    const loggedIn = !!localStorage.getItem('token')
+    const { accessToken } = useAuth();  // <<-- why is this undefined?
+  
+    console.log('accessToken:', accessToken);
+    const isLoggedIn = !!accessToken
+
     const handleLoginClick = () => {
-        navigate(loggedIn ? '/dashboard' : '/login');
+        navigate(isLoggedIn ? '/dashboard' : '/login');
     };
 
     return (
         <Button variant="outlined" style={{ position: 'absolute', top: 10, right: 10 }} onClick={handleLoginClick}>
-            {loggedIn ? 'APP' : 'LOGIN'}
+            {isLoggedIn ? 'APP' : 'LOGIN'}
         </Button>
     );
 };
