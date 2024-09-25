@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '../../contexts/auth/authContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
-import TabPanel from '../../components/monitization/TabPanel'
 import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 
 export default function Monetization() {
@@ -14,11 +13,11 @@ export default function Monetization() {
         if (user?.organisation?._id) {
             getOrganisationById(user.organisation._id)
         }
-    }, [user?.organisation?._id])
+    }, [ user?.organisation?._id ])
 
     return (
-        <HeaderContentLayout title='MONETIZATION'>
-            <TabPanel />
+        <HeaderContentLayout title='BILLING'>
+            <div></div>
         </HeaderContentLayout>
     )
 }

@@ -1,13 +1,12 @@
 import React, { useEffect } from 'react'
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import ListItemButton from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import { useNavigate } from 'react-router-dom';
 import MonetizationOn from '@mui/icons-material/MonetizationOn';
 import DashboardIcon from '@mui/icons-material/Dashboard';
+import PaymentIcon from '@mui/icons-material/Payment';
 import { useLocation } from 'react-router-dom';
+import NavItem from './NavItem';
 
 const LeftSideBar = () => {
   const navigate = useNavigate();
@@ -34,52 +33,27 @@ const LeftSideBar = () => {
   return (
     <Box sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
       <List component="nav" aria-label="main mailbox folders">
-      <ListItemButton
-          selected={selectedIndex === 0}
-          onClick={() => {
-            navigate('/dashboard')
-          }}
-        >
-          <ListItemIcon>
-            <DashboardIcon />
-          </ListItemIcon>
-          <ListItemText primary="DASHBOARD" />
-        </ListItemButton>
 
-      <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={() => {
-            navigate('/monetization')
-          }}
-        >
-          <ListItemIcon>
-            <MonetizationOn />
-          </ListItemIcon>
-          <ListItemText primary="MONETIZATION" />
-        </ListItemButton>
+          <NavItem
+            isSelected={selectedIndex === 0}
+            onClick={() => navigate('/dashboard')}
+            icon={<DashboardIcon />}
+            text="DASHBOARD"
+          />
 
-{/*         
-        <ListItemButton
-          selected={selectedIndex === 0}
-          onClick={(event) => handleListItemClick(event, 0)}
-        >
-          <ListItemIcon>
-            <InboxIcon />
-          </ListItemIcon>
-          <ListItemText primary="Inbox" />
-        </ListItemButton>
+          <NavItem
+            isSelected={selectedIndex === 1}
+            onClick={() => navigate('/monetization')}
+            icon={<MonetizationOn />}
+            text="Monetization"
+          />
 
-
-        <ListItemButton
-          selected={selectedIndex === 1}
-          onClick={(event) => handleListItemClick(event, 1)}
-        >
-          <ListItemIcon>
-            <DraftsIcon />
-          </ListItemIcon>
-          <ListItemText primary="Drafts" />
-
-        </ListItemButton> */}
+          <NavItem
+            isSelected={selectedIndex === 2}
+            onClick={() => navigate('/billing')}
+            icon={<PaymentIcon />}
+            text="Billing"
+          />
 
       </List>
     </Box>
@@ -87,3 +61,5 @@ const LeftSideBar = () => {
 }
 
 export default LeftSideBar
+
+
