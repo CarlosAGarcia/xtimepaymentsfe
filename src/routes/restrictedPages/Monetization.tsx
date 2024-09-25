@@ -17,7 +17,7 @@ export default function Monetization() {
     }, [user?.organisation?._id])
 
     return (
-        <HeaderContentLayout title='MONETIZATION'>
+        <HeaderContentLayout title='MONETIZATION' subTitle=''>
             <TabPanel />
         </HeaderContentLayout>
     )

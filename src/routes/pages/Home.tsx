@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
 import Logo from '../../components/home/Logo';
-import SubHeader from '../../components/home/Subheader';
 import TokenCountField from '../../components/fields/TokenCountField';
 import ButtonComponent from '../../components/buttons/Button1';
 import LoginButton from '../../components/buttons/LoginButton';
@@ -10,6 +9,7 @@ import TextList from '../../components/fields/TextList';
 import { Paper } from '@mui/material';
 import SubTitle from '../../components/home/SubTitle';
 import { CountTokenContextProvider } from '../../contexts/countTokens/countTokens';
+import SubHeader from '../../components/headers/Subheaders';
 
 const Home: React.FC = () => {
   return (
@@ -19,7 +19,7 @@ const Home: React.FC = () => {
             <LoginButton />
             <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', my: 2 }}>
                 <Logo />
-                <SubHeader />
+                <SubHeader title='SUB HEADER'/>
             </Box>
 
             <Paper elevation={3} sx={{ padding: '2rem', mt: '2rem' }}>

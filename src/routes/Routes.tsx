@@ -9,8 +9,8 @@ import VerifyPage from './pages/VerifyPage';
 
 import RestrictedRoute from './RestrictedRoute';
 import Dashboard from './restrictedPages/Dashboard';
-import Monetization from './restrictedPages/Monetization';
 import Billing from './restrictedPages/Billing';
+import Monetization from './restrictedPages/Monetization';
 
 function AppRoutes() {
   return (

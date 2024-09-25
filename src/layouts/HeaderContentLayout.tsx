@@ -3,16 +3,19 @@
 import React from 'react';
 import { Container } from '@mui/material';
 import Header from '../components/headers/Headers';
+import SubHeader from '../components/headers/Subheaders';
 
 interface HeaderContentLayoutProps {
     title: string;
+    subTitle: string;
     children: React.ReactNode;
 }
 
-const HeaderContentLayout: React.FC<HeaderContentLayoutProps> = ({ title, children }) => {
+const HeaderContentLayout: React.FC<HeaderContentLayoutProps> = ({ title, subTitle, children }) => {
     return (
         <Container>
             <Header title={title} />
+            <SubHeader title={subTitle} />
             {children}
         </Container>
     );
