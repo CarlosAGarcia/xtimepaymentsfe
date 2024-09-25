@@ -10,6 +10,7 @@ import VerifyPage from './pages/VerifyPage';
 import RestrictedRoute from './RestrictedRoute';
 import Dashboard from './restrictedPages/Dashboard';
 import Monetization from './restrictedPages/Monetization';
+import Billing from './restrictedPages/Billing';
 
 function AppRoutes() {
   return (
@@ -24,7 +25,7 @@ function AppRoutes() {
 
         <Route path="/dashboard" element={<RestrictedRoute component={<Dashboard/>} />} />
         <Route path="/monetization" element={<RestrictedRoute component={<Monetization/>} />} />
-
+        <Route path="/billing" element={<RestrictedRoute component={<Billing/>} />} />
 
         <Route path="*" element={<NotFound />} />
       </Routes>
