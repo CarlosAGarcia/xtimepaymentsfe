@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Tabs, Tab, Box, Typography } from '@mui/material';
+import TierCardHorizontalList from './TierCardHorizontalList';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -50,12 +51,12 @@ const TabPanel = () => {
 
       <TabPanelInner value={value} index={0}>
         {/* Content for TIERS tab */}
-        <Typography>This is the TIERS content.</Typography>
+        <TierCardHorizontalList />
       </TabPanelInner>
 
       <TabPanelInner value={value} index={1}>
         {/* Content for TOKENS tab */}
-        <Typography>This is the TOKENS content.</Typography>
+
       </TabPanelInner>
       </>
   );
