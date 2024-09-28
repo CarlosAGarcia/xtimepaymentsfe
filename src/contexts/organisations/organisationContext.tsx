@@ -1,7 +1,6 @@
 // exports the organisation context along with the following variables:
 // organisation, getOrganisationById, isGetOrganisationByIdLoading, isGetOrganisationByIdErr, getOrganisationByUserId
 import React, { createContext, useContext, useState } from 'react'
-import axios from 'axios'
 import { useAuth } from '../auth/authContext'
 import axiosInstance from '../api';
 
@@ -23,6 +22,7 @@ const OrganisationContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const [organisation, setOrganisation] = useState<any>(null)
     const [isGetOrganisationByIdLoading, setIsGetOrganisationByIdLoading] = useState<boolean>(false)
     const [isGetOrganisationByIdErr, setIsGetOrganisationByIdErr] = useState<boolean>(false)
+
     const getOrganisationById = async (id: string) => {
         try {
             setIsGetOrganisationByIdLoading(true)
@@ -31,12 +31,12 @@ const OrganisationContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
                     Authorization: `Bearer ${accessToken}`
                 }
             })
-                .then((response) => {
+                .then((response: any) => {
                     setOrganisation(response.data)
                     setIsGetOrganisationByIdLoading(false)
                     setIsGetOrganisationByIdErr(false)
                 })
-                .catch((error) => {
+                .catch((error: any) => {
                     console.error('Error fetching organisation:', error)
                     setIsGetOrganisationByIdLoading(false)
                     setIsGetOrganisationByIdErr(true)
