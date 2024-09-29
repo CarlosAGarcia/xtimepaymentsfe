@@ -27,7 +27,6 @@ const LoginPage: React.FC = () => {
                         Don't have an account? <Link href="/signup">Sign Up</Link>
                     </Typography>
 
-                    <Divider sx={{ width: '100%', mb: 2 }}>OR</Divider>
 
                     <ThirdPartyAuth />
                 </Box>

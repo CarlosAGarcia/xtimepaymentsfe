@@ -1,10 +1,14 @@
 // DataContext.tsx
 import axios from 'axios';
-import React, { createContext, useState, ReactNode } from 'react';
+import React, { createContext, useState, ReactNode, useContext } from 'react';
 
 // QUICK ref to user store
 // Everything included in context - VARS + FNS
-interface UserContextType {
+interface AuthContextType {
+    // Auth Token
+    accessToken: string | null;
+    setAccessToken: (token: string | null) => void;
+
     // Main - currnt user logged in
     user: any;
     isUserLoading: boolean;
@@ -17,22 +21,27 @@ interface UserContextType {
 
     // Sign up
     signUp: (vars: { email: string, password: string }, source?: any) => void;
-    signUpVars: { signUpSuccess: boolean, signUpLoading: boolean, signUpErr: boolean };
+    signUpVars: { signUpSuccess: boolean, signUpLoading: boolean, signUpErr: string };
 
     // LOGIN
     login: (vars: { email: string, password: string }, source?: any) => void;
-    loginVars: { loginSuccess: boolean, loginLoading: boolean, loginErr: boolean };
+    loginVars: { loginSuccess: boolean, loginLoading: boolean, loginErr: string };
+    logOut: () => void;
 }
 
-const UserContext = createContext<UserContextType | undefined>(undefined);
-const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+const { REACT_APP_API_URL } = process.env
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+const AuthContextProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
+
+    const [accessToken, setAccessToken] = useState<string | null>(localStorage.getItem('accessToken') || null);
+
 
     // Checks email availability - /api/users/login/isEmailAvailable - POST
     const [ isEmailAvailable, setIsEmailAvailable ] = useState<{ isEmailAvailable: boolean, isEmailAvailableLoading: boolean, isEmailAvailableErr: boolean }>({ isEmailAvailable: false, isEmailAvailableLoading: false, isEmailAvailableErr: false });
     const getIsEmailAvailable = async (email: string, source?: any) => {
         try {
             setIsEmailAvailable({ isEmailAvailable: false, isEmailAvailableLoading: true, isEmailAvailableErr: false });
-            await axios.post(`http://localhost:3001/api/users/login/isEmailAvailable/`, { email }, { cancelToken: source?.token })
+            await axios.post(`${REACT_APP_API_URL}/api/users/login/isEmailAvailable/`, { email }, { cancelToken: source?.token })
                 .then((response) => {
                     console.log("Email fetched:", response.data);
                     setIsEmailAvailable({ isEmailAvailable: response.data.isEmailAvailable, isEmailAvailableLoading: false, isEmailAvailableErr: false });
@@ -50,27 +59,23 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // Signs up user - /api/auth/signup - POST
     // updates the state vars for signUp - { signUpSuccess, signUpLoading, signUpErr }
-    const [{ signUpSuccess, signUpLoading, signUpErr }, setSignUp ] = useState<{ signUpSuccess: boolean, signUpLoading: boolean, signUpErr: boolean }>({ signUpSuccess: false, signUpLoading: false, signUpErr: false });
+    const [{ signUpSuccess, signUpLoading, signUpErr }, setSignUp ] = useState<{ signUpSuccess: boolean, signUpLoading: boolean, signUpErr: string }>({ signUpSuccess: false, signUpLoading: false, signUpErr: '' });
     const signUp = async (vars: { email: string, password: string }, source?: any) => {
         try {
             const { email, password } = vars;
-            setSignUp({ signUpSuccess: false, signUpLoading: true, signUpErr: false });
-            await axios.post(`http://localhost:3001/api/auth/signup`, { email, password }, { cancelToken: source?.token })
+            setSignUp({ signUpSuccess: false, signUpLoading: true, signUpErr: '' });
+            await axios.post(`${REACT_APP_API_URL}/api/auth/signup`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
-                    console.log("Sign up response:", response.data);
-                    setSignUp({ signUpSuccess: true, signUpLoading: false, signUpErr: false });
-
-                    // saves response.data.token to local storage
-                    localStorage.setItem('token', response.data.token);
+                    setSignUp({ signUpSuccess: true, signUpLoading: false, signUpErr: '' });
                 })
                 .catch((error) => {
-                    setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: true });
+                    setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: error?.response?.data?.message || 'Something went wrong' });
                     console.error("Error signing up:", error);
                 })
         }
         catch (error) {
-            console.error('Error fetching data:', error);
-            setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: true });
+            setSignUp({ signUpSuccess: false, signUpLoading: false, signUpErr: 'Something went wrong' });
+            console.error("Error signing up:", error);
         }
     };
    
@@ -78,14 +83,16 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     // gets user by id - /api/users/:id - GET
     const [ isUserLoading, setIsUserLoading ] = useState<boolean>(false);
     const [ isUserErr, setIsUserErr ] = useState<boolean>(false);
-    const [ user, setUser ] = useState<any>(null);
+    const [ user, setUser ] = useState<any>(
+        localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user') as string) :
+        null
+    );
     const getUser = async (id: string) => {
         try {
             setIsUserLoading(true);
             setIsUserErr(false);
-            await axios.get(`http://localhost:3001/api/users/${id}`)
+            await axios.get(`${REACT_APP_API_URL}/api/users/${id}`)
                 .then((response) => {
-                    console.log("User fetched:", response.data);
                     setIsUserLoading(false);
                     setUser(response.data);
                 })
@@ -103,40 +110,71 @@ const UserContextProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
 
     // logs in user - /api/auth/login - POST
     // updates the state vars for login - { loginSuccess, loginLoading, loginErr }
-    const [{ loginSuccess, loginLoading, loginErr }, setLogin ] = useState<{ loginSuccess: boolean, loginLoading: boolean, loginErr: boolean }>({ loginSuccess: false, loginLoading: false, loginErr: false });
+    const [{ loginSuccess, loginLoading, loginErr }, setLogin ] = useState<{ loginSuccess: boolean, loginLoading: boolean, loginErr: string }>({ loginSuccess: false, loginLoading: false, loginErr: '' });
     const login = async (vars: { email: string, password: string }, source?: any) => {
         try {
             const { email, password } = vars;
-            setLogin({ loginSuccess: false, loginLoading: true, loginErr: false });
-            await axios.post(`http://localhost:3001/api/auth/login`, { email, password }, { cancelToken: source?.token })
+            setLogin({ loginSuccess: false, loginLoading: true, loginErr: '' });
+            await axios.post(`${REACT_APP_API_URL}/api/auth/login`, { email, password }, { cancelToken: source?.token })
                 .then((response) => {
+                    const { accessToken: token , user } = response.data;
+
                     console.log("Login response:", response.data);
-                    setLogin({ loginSuccess: true, loginLoading: false, loginErr: false });
+                    setLogin({ loginSuccess: true, loginLoading: false, loginErr: '' });
 
                     // saves response.data.token to local storage
-                    localStorage.setItem('token', response.data.token);
+                    const usr = JSON.stringify(user)
+                    setUser(usr);
+                    localStorage.setItem('user', usr);
+                    localStorage.setItem('accessToken', token);
+                    setAccessToken(`${token}`);
+                    console.log("User logged in:", accessToken, );
+                    setTimeout(() => {
+                        window.location.href = '/dashboard';
+                    }, 2000);
                 })
                 .catch((error) => {
-                    setLogin({ loginSuccess: false, loginLoading: false, loginErr: true });
+                    setLogin({ loginSuccess: false, loginLoading: false, loginErr: error?.response?.data?.message || 'Something went wrong' });
                     console.error("Error logging in:", error);
                 })
         }
         catch (error) {
             console.error('Error fetching data:', error);
-            setLogin({ loginSuccess: false, loginLoading: false, loginErr: true });
+            setLogin({ loginSuccess: false, loginLoading: false, loginErr: 'Something went wrong. Please try again.' });
         }
     }
 
+    const logOut = () => {
+        setAccessToken(null);
+        setUser(null);
+        localStorage.removeItem('accessToken');
+        localStorage.removeItem('user');
+        window.location.href = '/';
+    }
+
     return (
-        <UserContext.Provider value={{
+        <AuthContext.Provider value={{
+            accessToken, setAccessToken,
             user, isUserErr, isUserLoading, getUser,
             isEmailAvailable, getIsEmailAvailable,
             signUp, signUpVars: { signUpSuccess, signUpLoading, signUpErr },
-            login, loginVars: { loginSuccess, loginLoading, loginErr }
+            login, loginVars: { loginSuccess, loginLoading, loginErr },
+            logOut
         }}>
             {children}
-        </UserContext.Provider>
+        </AuthContext.Provider>
     );
 };
 
-export { UserContext, UserContextProvider };
+// Custom hook to use the AuthContext
+const useAuth = (): AuthContextType => {
+    const context = useContext(AuthContext);
+    if (!context) {
+      throw new Error('useAuth must be used within an AuthProvider');
+    }
+    return context;
+  };
+
+export { useAuth, AuthContext, AuthContextProvider };
+
+

@@ -1,13 +1,22 @@
 import React, { ReactNode } from 'react';
 // import { DataProvider } from './DataProvider';
-import { UserContextProvider } from './users/users';
+import { AuthContextProvider } from './auth/authContext';
+import { OrganisationContextProvider } from './organisations/organisationContext';
+import { SiteManagementProvider } from './siteManagement/siteManagementContext';
 
 const MainProvider: React.FC<{ children: ReactNode }> = ({ children }) => {
   return (
     // <DataProvider>
-      <UserContextProvider>
-        {children}
-      </UserContextProvider>
+   
+      <AuthContextProvider>
+      <OrganisationContextProvider>
+      <SiteManagementProvider>
+            {children}
+      </SiteManagementProvider>
+      </OrganisationContextProvider>
+      </AuthContextProvider>
+    
+
     // </DataProvider>
   );
 };

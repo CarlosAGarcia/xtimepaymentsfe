@@ -1,6 +1,6 @@
 // src/components/RestrictedLayout.tsx
 import React from 'react';
-import NavBars from '../../components/navbar/NavBars';
+import NavBars from '../components/navbar/NavBars';
 
 interface RestrictedLayoutProps {
   children: React.ReactNode;

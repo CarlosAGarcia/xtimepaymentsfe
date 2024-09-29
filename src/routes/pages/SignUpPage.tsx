@@ -1,5 +1,5 @@
 import React from 'react';
-import { Box, Container, Divider, Typography, Link } from '@mui/material';
+import { Box, Container, Typography, Link } from '@mui/material';
 import Logo from '../../components/home/Logo';
 import ThirdPartyAuth from '../../components/loginSignup/ThirdPartyAuth';
 import SignUpField from '../../components/loginSignup/SignUpField';
@@ -23,8 +23,6 @@ const SignUpPage: React.FC = () => {
                     <Typography variant="body2" sx={{ mb: 2 }}>
                         Already have an account? <Link href="/login">Login</Link>
                     </Typography>
-
-                    <Divider sx={{ width: '100%', mb: 2 }}>OR</Divider>
 
                     <ThirdPartyAuth />
                 </Box>

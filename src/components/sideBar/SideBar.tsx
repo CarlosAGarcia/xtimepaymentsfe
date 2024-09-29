@@ -6,19 +6,20 @@ const Sidebar: React.FC = () => {
     left: false,
   });
 
-  const toggleDrawer =
-    (anchor: 'left', open: boolean) =>
-    (event: React.KeyboardEvent | React.MouseEvent) => {
-      if (
-        event &&
-        event.type === 'keydown' &&
-        ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')
-      ) {
+  const toggleDrawer = (anchor: 'left', open: boolean) => (event: React.KeyboardEvent | React.MouseEvent) => {
+      if ( event && event.type === 'keydown' && ((event as React.KeyboardEvent).key === 'Tab' || (event as React.KeyboardEvent).key === 'Shift')) {
         return;
       }
 
       setState({ ...state, [anchor]: open });
-    };
+  };
+
+  const getSideBarItems = (): any[] => {
+    if (anchor === 'left') return ['Item 1', 'Item 2', 'Item 3', 'Item 4']
+    if (anchor === 'right') return ['LOG OUT']
+
+    return []
+  }
 
   const list = (anchor: 'left') => (
     <div
@@ -27,7 +28,7 @@ const Sidebar: React.FC = () => {
       onKeyDown={toggleDrawer(anchor, false)}
     >
       <List>
-        {['Item 1', 'Item 2', 'Item 3', 'Item 4'].map((text, index) => (
+        {getSideBarItems().map((text, index) => (
           <ListItem button key={text}>
             <ListItemText primary={text} />
           </ListItem>

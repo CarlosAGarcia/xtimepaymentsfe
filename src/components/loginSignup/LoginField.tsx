@@ -1,17 +1,16 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Link, TextField } from '@mui/material';
 import axios from 'axios';
-import { UserContext } from '../../contexts/users/users';
+import { AuthContext } from '../../contexts/auth/authContext';
 import { slideOut, slideIn } from '../../styling/styling'
 
 let source: any;
-
 const LoginField: React.FC = () => {
     // 'global' state - context
-    const userContext = useContext(UserContext);
+    const userContext = useContext(AuthContext);
     if (!userContext) throw new Error('YourComponent must be used within a MainProvider');
     const { isEmailAvailable, getIsEmailAvailable, loginVars, login } = userContext;
-    const { loginSuccess: isLoginSuccess, loginLoading: isLoginLoading, loginErr: isLoginErr } = loginVars;
+    const { loginSuccess: isLoginSuccess, loginLoading: isLoginLoading, loginErr } = loginVars;
     const { isEmailAvailableLoading, isEmailAvailableErr, isEmailAvailable: isEmailAvailableResult } = isEmailAvailable;
 
     // local state
@@ -20,7 +19,7 @@ const LoginField: React.FC = () => {
 
     // on mount it sets up the axios cancel token and cancels reqs if unmounts
     useEffect(() => {
-        if (!source) source = axios.CancelToken.source();
+        source = axios.CancelToken.source();
         return () => {
             if (source) source.cancel('Unmounting component');
         };
@@ -62,21 +61,22 @@ const LoginField: React.FC = () => {
     }
 
     // redirects user to the dashboard if login is successful
-    useEffect(() => {
-        if (isLoginSuccess) {
-            setTimeout(() => {
-                window.location.href = '/dashboard';
-            }, 2000);
-        }
-    }, [isLoginSuccess]);
+    // useEffect(() => {
+    //     if (isLoginSuccess) {
+    //         setTimeout(() => {
+    //             window.location.href = '/dashboard';
+    //         }, 2000);
+    //     }
+    // }, [isLoginSuccess]);
 
     return (
         <Box sx={{ width: '100%' }}>
+            <form>
             {!showPassword ? <Box sx={{
                 width: '100%',
                 ...(animationClass === 'slide-out' ? { animation: `${slideOut} 0.5s forwards` } : {}),
             }}>
-                <TextField label="Email address" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangeEmail}/>
+                <TextField autoComplete='email' label="Email" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangeEmail}/>
                 <Button variant="contained" fullWidth sx={{ mb: 2 }} onClick={onContinueClick}>
                     {isEmailAvailableLoading ? 'LOADING...' : 'Continue'}
                 </Button> 
@@ -86,14 +86,15 @@ const LoginField: React.FC = () => {
                 width: '100%',
                 ...(animationClass === 'slide-in' ? { animation: `${slideIn} 0.5s forwards` } : {}),
             }}>
-                <TextField value={password} label="Password" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangePass}/>
+                <TextField autoComplete='password' value={password} label="Password" variant="outlined" fullWidth sx={{ mb: 2 }} onChange={onChangePass}/>
                 <Button variant="contained" fullWidth sx={{ mb: 2 }} onClick={onPassSubmit}>
                     {isLoginLoading ? 'LOADING...' : 'Submit'}
                 </Button> 
-                { isLoginErr && <p>There was an error logging in. Please try again.</p>}
+                { loginErr && <p>{loginErr}</p>}
                 { isLoginSuccess && <p><p>Logged in successfully!</p><Link href="#" sx={{ mx: 1 }}>Click here if you're not redirected</Link></p>}
             </Box>
             }
+            </form>
         </Box>
     );
 };
