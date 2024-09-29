@@ -21,7 +21,7 @@ export default function SiteManagement() {
     useEffect(() => {
         getSiteSettings()
         getOrganisationById(user?.organisation?._id)
-    }, [ getSiteSettings, getOrganisationById, user?.organisation?._id ])
+    }, [])
 
     if (isGetSiteSettingsLoading) {
         return <div>Loading...</div>
@@ -29,6 +29,7 @@ export default function SiteManagement() {
     if (isGetSiteSettingsErr) {
         return <div>Error...</div>
     }
+
     return (
         <>
             <SiteManagementHeader />

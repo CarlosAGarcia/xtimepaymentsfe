@@ -22,6 +22,7 @@ export default function SiteManagementHeader() {
     const saveChanges = () => { 
         // save changes to the site
     }
+
     const reset = () => {
         // reset the site to the last saved version
     }
@@ -29,6 +30,8 @@ export default function SiteManagementHeader() {
     return (
         <div>
             <h1>{`Site Management - ${organisation?.name}`}</h1>
+
+            {/* EXPLANATION + buttons */}
             <Box
                 component="div"
                 sx={{
@@ -67,6 +70,7 @@ export default function SiteManagementHeader() {
                 </Box>
             </Box>
             
+            {/* LINKS */}
             <Box
                 sx={{
                     p: 2,
@@ -84,12 +88,9 @@ export default function SiteManagementHeader() {
             </Button>
             
             <Collapse in={isOpen}>
-                
- 
                 This is the content inside the collapsible section. It can be anything from text, forms, to complex components.
             </Collapse>
             </Box>
-
 
             {/* <Analytics /> */}
             {/* <LiveSite /> */}
