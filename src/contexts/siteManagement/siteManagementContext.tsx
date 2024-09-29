@@ -2,10 +2,13 @@
 import React, { createContext, useContext, useState } from 'react'
 import { useAuth } from '../auth/authContext'
 import axiosInstance from '../api';
-import { useOrganisation } from '../organisations/organisationContext';
+
 
 interface SiteManagementContextType {
-
+    siteSettings: SiteSettings | undefined;
+    getSiteSettings: () => void;
+    isGetSiteSettingsLoading: boolean;
+    isGetSiteSettingsErr: string;
 }
 
 const { REACT_APP_API_URL } = process.env
@@ -13,16 +16,15 @@ const SiteManagementContext = createContext<SiteManagementContextType | undefine
 
 const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { accessToken } = useAuth()
-    const { organisation } = useOrganisation()
 
-    const [ siteSettings, setSiteSettings ] = useState<any>(null)
-    const [ isGetSiteSettingsLoading, setIsGetSiteSettingsLoading ] = useState<boolean>(false)
-    const [ isGetSiteSettingsErr, setIsGetSiteSettingsErr ] = useState<boolean>(false)
+    const [siteSettings, setSiteSettings] = useState<SiteSettings | undefined>(undefined)
+    const [isGetSiteSettingsLoading, setIsGetSiteSettingsLoading] = useState<boolean>(false)
+    const [isGetSiteSettingsErr, setIsGetSiteSettingsErr] = useState<string>('')
 
     const getSiteSettings = async () => {
         try {
             setIsGetSiteSettingsLoading(true)
-            await axiosInstance.get(`${REACT_APP_API_URL}/api/site/${organisation?._id}`, {
+            await axiosInstance.get(`${REACT_APP_API_URL}/api/siteSettings`, {
                 headers: {
                     Authorization: `Bearer ${accessToken}`
                 }
@@ -30,22 +32,27 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
                 .then((response: any) => {
                     setSiteSettings(response.data)
                     setIsGetSiteSettingsLoading(false)
-                    setIsGetSiteSettingsErr(false)
+                    setIsGetSiteSettingsErr('')
                 })
                 .catch((error: any) => {
                     console.error('Error fetching site settings:', error)
                     setIsGetSiteSettingsLoading(false)
-                    setIsGetSiteSettingsErr(true)
+                    setIsGetSiteSettingsErr('Error fetching site settings')
                 })
         } catch (error) {
             console.error('Error fetching data:', error)
             setIsGetSiteSettingsLoading(false)
-            setIsGetSiteSettingsErr(true)
+            setIsGetSiteSettingsErr('Error fetching site settings')
         }
     }
 
     return (
-        <SiteManagementContext.Provider value={{ }}>
+        <SiteManagementContext.Provider value={{
+            siteSettings,
+            getSiteSettings,
+            isGetSiteSettingsLoading,
+            isGetSiteSettingsErr
+         }}>
             {children}
         </SiteManagementContext.Provider>
     )
