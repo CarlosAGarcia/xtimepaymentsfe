@@ -13,7 +13,7 @@ interface SiteManagementContextType {
     isGetSiteSettingsErr: string;
 
     //EDIT
-    editSection: (content: any, section: string) => void;
+    editSection: ({ content, name, enabled }: { content: string; name: string; enabled?: boolean; }) => void;
     sectionsLoading: { [key: string]: boolean };
     sectionErrs: { [key: string]: string };
 }
@@ -60,31 +60,33 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
     // a hashmap of section names to loading states for each section, plus errors for each section
     const [sectionsLoading, setSectionsLoading] = useState<{ [key: string]: boolean }>({})
     const [sectionErrs, setSectionErrs] = useState<{ [key: string]: string }>({})
-    const editSection = async (content: any, section: string) => {
+    const editSection = async ({ content, name, enabled }: { content: string, name: string, enabled?: boolean }) => {
         // Send the content to your backend
-        setSectionsLoading({ ...sectionsLoading, [section]: true });
-        setSectionErrs({ ...sectionErrs, [section]: '' });
+        setSectionsLoading({ ...sectionsLoading, [name]: true });
+        setSectionErrs({ ...sectionErrs, [name]: '' });
+        
         await axiosInstance.put(`${REACT_APP_API_URL}/api/siteSettings/section`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
           },
           body: {
-            content: JSON.stringify({ content }),
-            section
+            content,
+            name,
+            enabled
           },
         }).then((response: any) => {
           alert('Content saved successfully');
           console.log('Content saved successfully:', response);
-            setSectionsLoading({ ...sectionsLoading, [section]: false });
+            setSectionsLoading({ ...sectionsLoading, [name]: false });
 
           // updates the site settings in context
           getSiteSettings();
         })
           .catch((error: any) => {
             console.error('Error saving content:', error);
-            setSectionsLoading({ ...sectionsLoading, [section]: false });
-            setSectionErrs({ ...sectionErrs, [section]: 'Error saving content' });
+            setSectionsLoading({ ...sectionsLoading, [name]: false });
+            setSectionErrs({ ...sectionErrs, [name]: 'Error saving content' });
           });
     };
 

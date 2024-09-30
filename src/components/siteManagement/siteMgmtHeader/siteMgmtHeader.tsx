@@ -11,7 +11,7 @@ import React from 'react'
 import { useOrganisation } from '../../../contexts/organisations/organisationContext'
 import { Button } from '@mui/material';
 import { Box, Collapse } from '@mui/material';
-
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 export default function SiteManagementHeader() {
     const { organisation } = useOrganisation()
@@ -95,7 +95,7 @@ export default function SiteManagementHeader() {
                             This is a demo page - Edit contents and preview changes before publishing.
                         </p>
                         <div>
-                            <button>
+                            {/* <button>
                                 <Button variant="contained" color="primary" onClick={reset}>
                                     RESET
                                 </Button>
@@ -104,12 +104,12 @@ export default function SiteManagementHeader() {
                                 <Button variant="contained" color="primary" onClick={saveChanges}>
                                     Publish
                                 </Button>
-                            </button>
+                            </button> */}
                         </div>
                     </Box>
 
                     {/* LINKS */}
-                    <Box
+                    {/* <Box
                         sx={{
                             p: 2,
                             backgroundColor: '#f0f0f0',
@@ -118,7 +118,7 @@ export default function SiteManagementHeader() {
                     >
                         LINKS HERE !!
                         
-                    </Box>
+                    </Box> */}
                     
                 </Collapse>
 
@@ -138,8 +138,12 @@ export default function SiteManagementHeader() {
                         {/* OPENS TEST URL IN NEW TAB */}
                         <Button onClick={() => window.open(SITE_URL, '_blank')} sx={{
                             marginRight: '1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+
                         }}>
-                            VIST SITE
+                            <div>{`${SITE_URL}`}</div>
+                            <OpenInNewIcon />
                         </Button>
 
                         {/* SHOW/HIDE BUTTON */}
