@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit'
 import { useEffect, useState } from 'react';
 import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
+import { Box, Skeleton } from '@mui/material';
 
 type Props = {
   sectionName: string;
@@ -18,11 +19,20 @@ const TipTapEditor = (props: Props) => {
   const sectionObject = getSection(sectionName)
 
   const [content, setContent] = useState('');
+
+  // Function to update the editor content
+  const updateEditorContent = (newContent: string) => {
+    setContent(newContent);
+    if (editor) {
+      editor.commands.setContent(newContent);
+    }
+  };
+
   useEffect(() => {
     if (sectionObject) {
-      setContent(sectionObject.content)
+      updateEditorContent(sectionObject.content)
     }
-  }, [sectionObject])
+  }, [ sectionObject?.content ]);
 
   const editor = useEditor({
     extensions: [StarterKit],
@@ -32,6 +42,8 @@ const TipTapEditor = (props: Props) => {
       setContent(editor.getHTML());
     },
   });
+
+
 
   const handleSave = async () => {
     try {
@@ -43,10 +55,21 @@ const TipTapEditor = (props: Props) => {
 
   return (
     <div>
-      <EditorContent editor={editor} />
-      <button onClick={handleSave}>Save Content</button>
-      {isLoading && <div>Loading...</div>}
-      {err && <div>{err}</div>}
+      {isLoading ? (
+        // Skeleton will inherit the dimensions of the child it wraps
+        <Skeleton variant="rectangular" animation="wave">
+            <EditorContent editor={editor} />
+            <button onClick={handleSave}>Save Content</button>
+            {err && <div>{err}</div>}
+        </Skeleton>
+      ) : (
+        // Render actual content after loading
+        <Box sx={{ minHeight: '100px', backgroundColor: 'lightgray' }}>
+          <EditorContent editor={editor} />
+          <button onClick={handleSave}>Save Content</button>
+          {err && <div>{err}</div>}
+        </Box>
+      )}
     </div>
   );
 };

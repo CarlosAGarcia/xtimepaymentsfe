@@ -86,7 +86,7 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
             setSectionsLoading({ ...sectionsLoading, [section]: false });
             setSectionErrs({ ...sectionErrs, [section]: 'Error saving content' });
           });
-      };
+    };
 
     return (
         <SiteManagementContext.Provider value={{
