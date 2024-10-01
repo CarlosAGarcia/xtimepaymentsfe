@@ -7,7 +7,7 @@ import TipTapEditor from '../editor/TipTapEditor';
 
 const SiteManagementContent = () => {
     const { siteSettings } = useSiteManagement()
-    const sections = [ siteSettings?.sections[0] ] // || []
+    const sections = siteSettings?.sections || []
 
     return (
         <div>

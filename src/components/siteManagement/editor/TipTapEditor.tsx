@@ -5,10 +5,12 @@ import Italic from '@tiptap/extension-italic';
 import Heading from '@tiptap/extension-heading';
 import { useEffect, useState } from 'react';
 import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
-import { Box, Button, Fade, Skeleton, IconButton, Collapse } from '@mui/material';
+import { Box, Button, IconButton, Collapse } from '@mui/material';
 import Strike from '@tiptap/extension-strike';
-// import TextAlign from '@tiptap/extension-text-align';
 import { FormatBold, FormatItalic, StrikethroughS } from '@mui/icons-material';
+import TextStyle from '@tiptap/extension-text-style';
+import FontFamily from '@tiptap/extension-font-family';
+import FontFamilySelector from './FontFamilySelector';
 
 type Props = {
   sectionName: string;
@@ -17,34 +19,27 @@ type Props = {
 const TipTapEditor = (props: Props) => {
   const { sectionName } = props;
 
+  // CONTEXT vars
   const { getSection, sectionsLoading, sectionErrs, editSection } = useSiteManagement()
-
-  // gets this specific section from the siteSettings object
   const isLoading = sectionsLoading[sectionName]
   const err = sectionErrs[sectionName]
   const sectionObject = getSection(sectionName)
 
+
+  // ############### LOCAL STATE ###############
   const [content, setContent] = useState('');
   const [isFocused, setIsFocused] = useState(false); // To track focus state
 
-  // Function to update the editor content
-  const updateEditorContent = (newContent: string) => {
-    setContent(newContent);
-    if (editor) {
-      editor.commands.setContent(newContent);
-    }
-  };
 
-  useEffect(() => {
-    if (sectionObject) {
-      updateEditorContent(sectionObject.content)
-    }
-  }, [ sectionObject?.content ]);
-
+  // ############### UPDATES EDITOR CONTENT ON LOAD ###############
   const editor = useEditor({
     extensions: [
       StarterKit, 
       Bold, Italic, Heading, Strike,
+      TextStyle,  // Required for handling inline text styles
+      FontFamily.configure({
+        types: ['textStyle'],  // Ensure it applies to textStyle
+      }),
       // TextAlign.configure({ types: ['heading', 'paragraph'] })
     ],
     content: content,
@@ -55,7 +50,45 @@ const TipTapEditor = (props: Props) => {
       setContent(editor?.getHTML());
     },
   });
+  const updateEditorContent = (newContent: string) => {
+    setContent(newContent);
+    if (editor) {
+      editor.commands.setContent(newContent);
+    }
+  };
+  useEffect(() => {
+    if (sectionObject) {
+      updateEditorContent(sectionObject.content)
+    }
+  }, [ sectionObject?.content ]);
 
+  // ############### OVERWRITES TAB KEY TO INSERT SPACES ###############
+  useEffect(() => {
+    // Function to handle the Tab key press and insert spaces
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Tab') {
+        event.preventDefault();
+        // You can insert a tab (usually 4 spaces) or customize the amount of spaces
+        editor?.commands.insertContent('    ');
+      }
+    };
+
+    // Add the keydown event listener to the editor's DOM element
+    const editorElement = document.querySelector('.ProseMirror');
+    
+    // TypeScript expects an EventListener type, so cast the event to KeyboardEvent
+    const listener = (event: Event) => handleKeyDown(event as KeyboardEvent);
+
+    editorElement?.addEventListener('keydown', listener);
+
+    // Clean up the event listener when the component unmounts
+    return () => {
+      editorElement?.removeEventListener('keydown', listener);
+    };
+  }, [editor]);
+
+
+  // ############### ACTION FUNCTIONS - SAVE/DELETE ###############
   const handleSave = async () => {
     try {
       const htmlContent = editor?.getHTML() || '';
@@ -71,24 +104,17 @@ const TipTapEditor = (props: Props) => {
     editSection({ content, name: sectionName, enabled: false })
   };
 
-  console.log('isFoxused:', isFocused)
-  function debounce<T extends (...args: any[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
-    let timer: NodeJS.Timeout;
-    return function (...args: Parameters<T>) {
-      clearTimeout(timer);
-      timer = setTimeout(() => func(...args), delay);
-    };
-  }
+
+
   return (
     <div
-      onBlur={() => isFocused ? debounce(() => setIsFocused(false), 200) : undefined}
+      onBlur={() => isFocused ? setIsFocused(false) : undefined}
       onFocus={() => !isFocused && setIsFocused(true)}
     >
       <Box
         sx={{ backgroundColor: 'lightgray', marginBottom: '.5rem', padding: '1rem', position: 'relative' }}
         tabIndex={-1} // Make the Box focusable
       >
-
 
         {/* Tiptap Editor Content */}
         <EditorContent editor={editor} />
@@ -98,7 +124,7 @@ const TipTapEditor = (props: Props) => {
           easing={{ enter: 'ease-out', exit: 'ease-in' }}  // Smooth easing
           sx={{ mt: 2, transition: 'all 0.5s ease' }}  // Smooth transition for the buttons as well
         >
-          <Box
+        <Box
               sx={{
                 display: 'flex',
                 gap: 1,
@@ -111,23 +137,24 @@ const TipTapEditor = (props: Props) => {
               <IconButton
                 onClick={() => editor?.chain().focus().toggleBold().run()}
                 color={editor?.isActive('bold') ? 'primary' : 'default'}
-              >
-                <FormatBold />
-              </IconButton>
+              ><FormatBold /></IconButton>
+
               <IconButton
                 onClick={() => editor?.chain().focus().toggleItalic().run()}
                 color={editor?.isActive('italic') ? 'primary' : 'default'}
-              >
-                <FormatItalic />
-              </IconButton>
+              ><FormatItalic /></IconButton>
+
               <IconButton
                 onClick={() => editor?.chain().focus().toggleStrike().run()}
                 color={editor?.isActive('strike') ? 'primary' : 'default'}
-              >
-                <StrikethroughS />
-              </IconButton>
-              {/* You can add more buttons for additional features like underline, font size, etc. */}
-          </Box>
+              ><StrikethroughS /></IconButton>
+
+              <div className='ff'>
+
+             <FontFamilySelector editor={editor} />
+             </div>
+
+        </Box>
         <Box mt={2}>
           <Button onClick={handleSave} variant="contained" color="primary">
             Save Content
