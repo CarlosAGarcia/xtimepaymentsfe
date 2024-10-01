@@ -71,80 +71,76 @@ const TipTapEditor = (props: Props) => {
     editSection({ content, name: sectionName, enabled: false })
   };
 
+  console.log('isFoxused:', isFocused)
+  function debounce<T extends (...args: any[]) => void>(func: T, delay: number): (...args: Parameters<T>) => void {
+    let timer: NodeJS.Timeout;
+    return function (...args: Parameters<T>) {
+      clearTimeout(timer);
+      timer = setTimeout(() => func(...args), delay);
+    };
+  }
   return (
-    <div>
-      {isLoading ? (
-        // Skeleton will inherit the dimensions of the child it wraps
-        <Skeleton variant="rectangular" animation="wave">
-            <EditorContent editor={editor} />
-            <button onClick={handleSave}>Save Content</button>
-            {err && <div>{err}</div>}
-        </Skeleton>
-      ) : (
-        // Render actual content after loading
-<Box
-      sx={{ backgroundColor: 'lightgray', marginBottom: '.5rem', padding: '1rem' }}
-      onFocus={() => setIsFocused(true)}
-      onBlur={() => setIsFocused(false)}
-      tabIndex={-1} // Make the Box focusable
+    <div
+      onBlur={() => isFocused ? debounce(() => setIsFocused(false), 200) : undefined}
+      onFocus={() => !isFocused && setIsFocused(true)}
     >
-      {/* Toolbar */}
-            {/* Toolbar (expands upwards) */}
-      <Collapse in={isFocused} orientation="vertical" sx={{ width: '100%' }}>
-      {isFocused && (
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 1,
-            mb: 2,
-            backgroundColor: '#f5f5f5',
-            padding: '10px',
-            borderRadius: '4px',
-          }}
+      <Box
+        sx={{ backgroundColor: 'lightgray', marginBottom: '.5rem', padding: '1rem', position: 'relative' }}
+        tabIndex={-1} // Make the Box focusable
+      >
+
+
+        {/* Tiptap Editor Content */}
+        <EditorContent editor={editor} />
+
+        {/* Save/Delete Buttons */}
+        <Collapse in={isFocused} orientation="vertical" 
+          easing={{ enter: 'ease-out', exit: 'ease-in' }}  // Smooth easing
+          sx={{ mt: 2, transition: 'all 0.5s ease' }}  // Smooth transition for the buttons as well
         >
-          <IconButton
-            onClick={() => editor?.chain().focus().toggleBold().run()}
-            color={editor?.isActive('bold') ? 'primary' : 'default'}
-          >
-            <FormatBold />
-          </IconButton>
-          <IconButton
-            onClick={() => editor?.chain().focus().toggleItalic().run()}
-            color={editor?.isActive('italic') ? 'primary' : 'default'}
-          >
-            <FormatItalic />
-          </IconButton>
-          <IconButton
-            onClick={() => editor?.chain().focus().toggleStrike().run()}
-            color={editor?.isActive('strike') ? 'primary' : 'default'}
-          >
-            <StrikethroughS />
-          </IconButton>
-          {/* You can add more buttons for additional features like underline, font size, etc. */}
+          <Box
+              sx={{
+                display: 'flex',
+                gap: 1,
+                mb: 2,
+                backgroundColor: '#f5f5f5',
+                padding: '10px',
+                borderRadius: '4px',
+              }}
+            >
+              <IconButton
+                onClick={() => editor?.chain().focus().toggleBold().run()}
+                color={editor?.isActive('bold') ? 'primary' : 'default'}
+              >
+                <FormatBold />
+              </IconButton>
+              <IconButton
+                onClick={() => editor?.chain().focus().toggleItalic().run()}
+                color={editor?.isActive('italic') ? 'primary' : 'default'}
+              >
+                <FormatItalic />
+              </IconButton>
+              <IconButton
+                onClick={() => editor?.chain().focus().toggleStrike().run()}
+                color={editor?.isActive('strike') ? 'primary' : 'default'}
+              >
+                <StrikethroughS />
+              </IconButton>
+              {/* You can add more buttons for additional features like underline, font size, etc. */}
+          </Box>
+        <Box mt={2}>
+          <Button onClick={handleSave} variant="contained" color="primary">
+            Save Content
+          </Button>
+          <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
+            Delete Content
+          </Button>
         </Box>
-      )}
-      </Collapse>
+        </Collapse>
 
-      {/* Tiptap Editor Content */}
-      <EditorContent editor={editor} />
+        {err && <div>{err}</div>}
 
-      {/* Save/Delete Buttons */}
-      {/* Save/Delete Buttons (expands downwards) */}
-      <Collapse in={isFocused} orientation="vertical" sx={{ mt: 2 }}>
-      <Box mt={2}>
-        <Button onClick={handleSave} variant="contained" color="primary">
-          Save Content
-        </Button>
-        <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
-          Delete Content
-        </Button>
       </Box>
-    </Collapse>
-
-      {err && <div>{err}</div>}
-    </Box>
-
-      )}
     </div>
   );
 };
