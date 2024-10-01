@@ -1,6 +1,7 @@
 declare module '@tiptap/starter-kit' ;
 declare module '@tiptap/extension-link';
 declare module '@tiptap/extension-youtube';
+// declare module '@tiptap/extension-text-align';
 
 type Section = {
     _id: string;

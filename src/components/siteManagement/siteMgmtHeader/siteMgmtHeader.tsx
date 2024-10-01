@@ -10,9 +10,8 @@
 import React from 'react'
 import { useOrganisation } from '../../../contexts/organisations/organisationContext'
 import { Button } from '@mui/material';
-import { css } from '@emotion/react';
 import { Box, Collapse } from '@mui/material';
-
+import OpenInNewIcon from '@mui/icons-material/OpenInNew';
 
 export default function SiteManagementHeader() {
     const { organisation } = useOrganisation()
@@ -27,9 +26,11 @@ export default function SiteManagementHeader() {
         // reset the site to the last saved version
     }
 
+    // site url is this website url + /organisation?.name
+    const currentUrl = window.location.hostname
+    const SITE_URL = `https://www.${currentUrl}/${organisation?.name}`
     return (
         <div>
-            <h1>{`Site Management - ${organisation?.name}`}</h1>
 
             {/* EXPLANATION + buttons */}
             <Box
@@ -39,63 +40,127 @@ export default function SiteManagementHeader() {
                     color: '#333',
                     padding: '16px',
                     borderRadius: '8px',
-                    display: 'flex',
+                    fontSize: '1rem',
                 }}
             >
+                {/* HEADER */}
                 <Box className='header'
+                // sx breaks the Box child and h1 child into different lines if too long to fit
                     sx={{
-                        backgroundColor: '#f0f0f0',
-                        color: '#333',
-                        padding: '16px',
-                        borderRadius: '8px',
                         display: 'flex',
+                        alignItems: 'center',
+                        flexWrap: 'wrap',
+                        '@media (max-width: 1000px)': {
+                            fontSize: '.8rem',
+                            overflow: 'hidden',
+                            textOverflow: 'ellipsis',
+                            // centered text
+                            justifyContent: 'center',
+                        },
+                        'h1': {
+                            marginBottom: '0',
+                            marginTop: '0',
+                        }
                     }}
                 >
-                    <p>
-                        This is a demo page - Edit contents and preview changes before publishing.
-                    </p>
-
-                    <div>
-                    <button>
-                            <Button variant="contained" color="primary" onClick={reset}>
-                                RESET
-                            </Button>
-                        </button>
-                        <button>
-                            <Button variant="contained" color="primary" onClick={saveChanges}>
-                                Publish
-                            </Button>
-                        </button>
-                    </div>
+                    <Box sx={{
+                        marginRight: '1rem',
+                        '@media (max-width: 1000px)': {
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }
+                    }}>
+                        <h1>{`SITE MANAGEMENT`}</h1>
+                    </Box>
+                    <Box 
+                        // if window width is less than 1000px, h1 font size is .8rem
+                        // also it's overflow hidden with ellipsis
+                        sx={{
+                            '@media (max-width: 1000px)': {
+                                marginRight: 0,
+                                display: 'flex',
+                                justifyContent: 'center'
+                            }
+                        }}
+                    >
+                        <h1>{`${organisation?.name}`}</h1>
+                    </Box>
                 </Box>
-            </Box>
-            
-            {/* LINKS */}
-            <Box
-                sx={{
-                    p: 2,
-                    backgroundColor: '#f0f0f0',
-                    borderRadius: '8px',
-                }}
-                >
-            <Button
-                onClick={() => setIsOpen(!isOpen)}
-                sx={{
-                    mt: 2,
-                }}
-            >
-                {isOpen ? 'Hide' : 'Show'} Site Links
-            </Button>
-            
-            <Collapse in={isOpen}>
-                This is the content inside the collapsible section. It can be anything from text, forms, to complex components.
-            </Collapse>
+                    
+                <Collapse in={isOpen}>
+                    {/* DESCRIPTION */}
+
+                    <Box>
+                        <p>
+                            This is a demo page - Edit contents and preview changes before publishing.
+                        </p>
+                        <div>
+                            {/* <button>
+                                <Button variant="contained" color="primary" onClick={reset}>
+                                    RESET
+                                </Button>
+                            </button>
+                            <button>
+                                <Button variant="contained" color="primary" onClick={saveChanges}>
+                                    Publish
+                                </Button>
+                            </button> */}
+                        </div>
+                    </Box>
+
+                    {/* LINKS */}
+                    {/* <Box
+                        sx={{
+                            p: 2,
+                            backgroundColor: '#f0f0f0',
+                            borderRadius: '8px',
+                        }}
+                    >
+                        LINKS HERE !!
+                        
+                    </Box> */}
+                    
+                </Collapse>
+
+                {/* BOT BUTTONs */}
+                <Box sx={{
+                    // bot right corner
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    marginTop: '1rem',
+                }}>
+                    <Box
+                    sx={{
+                        // container flex for buttons
+                        display: 'flex',
+                        
+                    }}>
+                        {/* OPENS TEST URL IN NEW TAB */}
+                        <Button onClick={() => window.open(SITE_URL, '_blank')} sx={{
+                            marginRight: '1rem',
+                            display: 'flex',
+                            alignItems: 'center',
+
+                        }}>
+                            <div>{`${SITE_URL}`}</div>
+                            <OpenInNewIcon />
+                        </Button>
+
+                        {/* SHOW/HIDE BUTTON */}
+                        <Button onClick={() => setIsOpen(!isOpen)} sx={{
+                        }} >
+                            {isOpen ? 'Hide' : 'Show'} Details
+                        </Button>  
+                    </Box>
+                </Box>
+
             </Box>
 
             {/* <Analytics /> */}
             {/* <LiveSite /> */}
             {/* <SiteLinks /> */}
             {/* <Content /> */}
+
         </div>
     )
 }

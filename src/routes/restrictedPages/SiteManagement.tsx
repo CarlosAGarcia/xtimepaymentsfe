@@ -4,6 +4,7 @@ import SiteManagementContent from '../../components/siteManagement/siteMgmtConte
 import { useSiteManagement } from '../../contexts/siteManagement/siteManagementContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
 import { useAuth } from '../../contexts/auth/authContext'
+import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 
 /*
     This page would display a demo of the actual site but with editing capabilities.
@@ -32,8 +33,11 @@ export default function SiteManagement() {
 
     return (
         <>
+        <HeaderContentLayout title='' subTitle=''>
+        
             <SiteManagementHeader />
             <SiteManagementContent />
+        </HeaderContentLayout>
         </>
     )
 }
