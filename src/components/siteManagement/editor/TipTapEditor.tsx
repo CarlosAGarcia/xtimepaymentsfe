@@ -10,8 +10,10 @@ import Strike from '@tiptap/extension-strike';
 import { FormatBold, FormatItalic, StrikethroughS } from '@mui/icons-material';
 import TextStyle from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
-import FontFamilySelector from './FontFamilySelector';
+import FontFamilySelector from './components/FontFamilySelector';
 import './EditorStyles.css'; // Import custom CSS for styling
+import FontSizeSelector from './components/FontSizeSelector';
+import { FontSize } from './customExtensions/FontSize';
 
 type Props = {
   sectionName: string;
@@ -38,6 +40,10 @@ const TipTapEditor = (props: Props) => {
       StarterKit, 
       Bold, Italic, Heading, Strike,
       TextStyle,  // Required for handling inline text styles
+      FontSize,
+      // FontSize.configure({
+      //   types: ['textStyle'],  // Ensure it applies to textStyle
+      // }),
       FontFamily.configure({
         types: ['textStyle'],  // Ensure it applies to textStyle
       }),
@@ -173,6 +179,7 @@ const TipTapEditor = (props: Props) => {
 
              <FontFamilySelector editor={editor} />
 
+              <FontSizeSelector editor={editor} />
         </Box>
         <Box mt={2}>
           <Button onClick={handleSave} variant="contained" color="primary">
