@@ -69,7 +69,8 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
-          },
+            Authorization: `Bearer ${accessToken}`
+        },
           body: {
             content,
             name,
