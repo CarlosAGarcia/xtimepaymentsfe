@@ -66,16 +66,14 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
         setSectionErrs({ ...sectionErrs, [name]: '' });
         
         await axiosInstance.put(`${REACT_APP_API_URL}/api/siteSettings/section`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-            Authorization: `Bearer ${accessToken}`
-        },
-          body: {
             content,
             name,
             enabled
-          },
+        }, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${accessToken}`
+            }
         }).then((response: any) => {
           alert('Content saved successfully');
           console.log('Content saved successfully:', response);
