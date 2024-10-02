@@ -11,6 +11,7 @@ import { FormatBold, FormatItalic, StrikethroughS } from '@mui/icons-material';
 import TextStyle from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
 import FontFamilySelector from './FontFamilySelector';
+import './EditorStyles.css'; // Import custom CSS for styling
 
 type Props = {
   sectionName: string;
@@ -105,7 +106,6 @@ const TipTapEditor = (props: Props) => {
   };
 
 
-
   return (
     <div
       onBlur={() => isFocused ? setIsFocused(false) : undefined}
@@ -117,7 +117,28 @@ const TipTapEditor = (props: Props) => {
       >
 
         {/* Tiptap Editor Content */}
-        <EditorContent editor={editor} />
+        <Box 
+          sx={{ 
+            padding: 0,                   // Ensure no unwanted padding
+            minHeight: '200px',           // Minimum height for the editor area
+            display: 'flex',              // Ensure content is flexible
+            alignItems: 'stretch',        // Stretch content to fit the container
+           }}
+        >
+          <div className="editor-wrapper">
+
+          <EditorContent
+            editor={editor}
+            style={{
+              width:'100%',                  // Ensure editor fills the container
+              flexGrow: 1,                // Ensures editor grows to fit
+              padding: '10px',            // Inner padding for the editor content
+              display: 'flex'
+            }}
+           />
+          </div>
+
+        </Box>
 
         {/* Save/Delete Buttons */}
         <Collapse in={isFocused} orientation="vertical" 
@@ -149,10 +170,8 @@ const TipTapEditor = (props: Props) => {
                 color={editor?.isActive('strike') ? 'primary' : 'default'}
               ><StrikethroughS /></IconButton>
 
-              <div className='ff'>
 
              <FontFamilySelector editor={editor} />
-             </div>
 
         </Box>
         <Box mt={2}>

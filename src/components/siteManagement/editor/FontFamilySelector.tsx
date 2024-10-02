@@ -1,3 +1,5 @@
+import { Box } from "@mui/material";
+
 const FontFamilySelector = ({ editor }: any) => {
   
     const changeFontFamily = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -10,17 +12,19 @@ const FontFamilySelector = ({ editor }: any) => {
     };
   
     return (
-        <div className="ffSelector">
-
-      <select onChange={changeFontFamily}>
-        <option value="default">Default</option>
-        <option value="Arial">Arial</option>
-        <option value="Georgia">Georgia</option>
-        <option value="Times New Roman">Times New Roman</option>
-        <option value="Courier New">Courier New</option>
-        <option value="Verdana">Verdana</option>
-      </select>
-      </div>
+        <Box className="ffSelector" sx={{
+            display: 'flex',
+            alignItems: 'center',
+        }}>
+        <select onChange={changeFontFamily}>
+            <option value="default">Default</option>
+            <option value="Arial">Arial</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Verdana">Verdana</option>
+        </select>
+      </Box>
 
     );
   };
