@@ -34,7 +34,6 @@ export default function SiteManagement() {
     return (
         <>
         <HeaderContentLayout title='' subTitle=''>
-        
             <SiteManagementHeader />
             <SiteManagementContent />
         </HeaderContentLayout>

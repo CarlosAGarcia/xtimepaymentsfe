@@ -12,9 +12,11 @@ import { useOrganisation } from '../../../contexts/organisations/organisationCon
 import { Button } from '@mui/material';
 import { Box, Collapse } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
+import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
 
 export default function SiteManagementHeader() {
     const { organisation } = useOrganisation()
+    const { saveTempSiteSettings } = useSiteManagement()
 
     const [isOpen, setIsOpen] = React.useState(false)
 
@@ -50,12 +52,13 @@ export default function SiteManagementHeader() {
                         display: 'flex',
                         alignItems: 'center',
                         flexWrap: 'wrap',
+                        justifyContent: 'center',
                         '@media (max-width: 1000px)': {
                             fontSize: '.8rem',
                             overflow: 'hidden',
                             textOverflow: 'ellipsis',
                             // centered text
-                            justifyContent: 'center',
+                            // justifyContent: 'center',
                         },
                         'h1': {
                             marginBottom: '0',
@@ -67,7 +70,7 @@ export default function SiteManagementHeader() {
                         marginRight: '1rem',
                         '@media (max-width: 1000px)': {
                             display: 'flex',
-                            justifyContent: 'center',
+                            // justifyContent: 'center',
                         }
                     }}>
                         <h1>{`SITE MANAGEMENT`}</h1>
@@ -123,6 +126,10 @@ export default function SiteManagementHeader() {
                 </Collapse>
 
                 {/* BOT BUTTONs */}
+
+
+            {/* container that  */}
+
                 <Box sx={{
                     // bot right corner
                     display: 'flex',
@@ -130,11 +137,16 @@ export default function SiteManagementHeader() {
                     marginTop: '1rem',
                 }}>
                     <Box
-                    sx={{
-                        // container flex for buttons
-                        display: 'flex',
-                        
-                    }}>
+                        sx={{
+                            // container flex for buttons
+                            display: 'flex',
+                            
+                        }}>
+                        <Button onClick={saveTempSiteSettings} sx={{
+                        }} >
+                            SAVE
+                        </Button>  
+
                         {/* OPENS TEST URL IN NEW TAB */}
                         <Button onClick={() => window.open(SITE_URL, '_blank')} sx={{
                             marginRight: '1rem',

@@ -24,7 +24,7 @@ axiosInstance.interceptors.response.use(
 
       try {
         // Make a request to refresh the access token
-        const { data } = await axiosInstance.post('/auth/refreshToken');
+        const { data } = await axiosInstance.get('/api/auth/refreshToken');
         const { accessToken, success } = data;
         if (!success) throw new Error('Access token not provided');
 

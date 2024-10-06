@@ -4,13 +4,13 @@ declare module '@tiptap/extension-youtube';
 // declare module '@tiptap/extension-text-align';
 
 type Section = {
-    _id: string;
+    _id?: string;
     enabled: boolean;
     name: string;
-    order: number;
+    order?: number;
     content: string;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
 
 // org is a ref to the org, sections is an array of Section types

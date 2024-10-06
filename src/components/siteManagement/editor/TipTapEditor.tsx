@@ -10,24 +10,25 @@ import Strike from '@tiptap/extension-strike';
 import { FormatBold, FormatItalic, StrikethroughS } from '@mui/icons-material';
 import TextStyle from '@tiptap/extension-text-style';
 import FontFamily from '@tiptap/extension-font-family';
-import FontFamilySelector from './FontFamilySelector';
+import FontFamilySelector from './components/FontFamilySelector';
+import './EditorStyles.css'; // Import custom CSS for styling
+import FontSizeSelector from './components/FontSizeSelector';
+import { FontSize } from './customExtensions/FontSize';
 
 type Props = {
   sectionName: string;
+  content: string;
+  setContent: (content: string) => void;
 };
 
 const TipTapEditor = (props: Props) => {
-  const { sectionName } = props;
+  const { sectionName, content, setContent } = props;
 
   // CONTEXT vars
-  const { getSection, sectionsLoading, sectionErrs, editSection } = useSiteManagement()
-  const isLoading = sectionsLoading[sectionName]
+  const { siteSettingsTemp, setSiteSettingsTemp, sectionErrs } = useSiteManagement()
   const err = sectionErrs[sectionName]
-  const sectionObject = getSection(sectionName)
-
 
   // ############### LOCAL STATE ###############
-  const [content, setContent] = useState('');
   const [isFocused, setIsFocused] = useState(false); // To track focus state
 
 
@@ -37,6 +38,10 @@ const TipTapEditor = (props: Props) => {
       StarterKit, 
       Bold, Italic, Heading, Strike,
       TextStyle,  // Required for handling inline text styles
+      FontSize,
+      // FontSize.configure({
+      //   types: ['textStyle'],  // Ensure it applies to textStyle
+      // }),
       FontFamily.configure({
         types: ['textStyle'],  // Ensure it applies to textStyle
       }),
@@ -50,17 +55,7 @@ const TipTapEditor = (props: Props) => {
       setContent(editor?.getHTML());
     },
   });
-  const updateEditorContent = (newContent: string) => {
-    setContent(newContent);
-    if (editor) {
-      editor.commands.setContent(newContent);
-    }
-  };
-  useEffect(() => {
-    if (sectionObject) {
-      updateEditorContent(sectionObject.content)
-    }
-  }, [ sectionObject?.content ]);
+
 
   // ############### OVERWRITES TAB KEY TO INSERT SPACES ###############
   useEffect(() => {
@@ -89,21 +84,20 @@ const TipTapEditor = (props: Props) => {
 
 
   // ############### ACTION FUNCTIONS - SAVE/DELETE ###############
-  const handleSave = async () => {
-    try {
-      const htmlContent = editor?.getHTML() || '';
-      await editSection({ content: `${htmlContent}`, name: sectionName, enabled: true })
-    } catch (error) {
-      console.error('Error saving content:', error)
-    }
-  }
 
-  // Delete function
+  // Delete function - memory only
   const handleDelete = () => {
-    // just sets enabled to false and saves
-    editSection({ content, name: sectionName, enabled: false })
-  };
-
+      // just sets enabled to false for the section
+      setSiteSettingsTemp({
+        ...siteSettingsTemp,
+        sections: siteSettingsTemp?.sections.map(section => {
+          if (section.name === sectionName) {
+            return { ...section, enabled: false }
+          }
+          return section
+      })
+    })
+  }
 
 
   return (
@@ -117,7 +111,28 @@ const TipTapEditor = (props: Props) => {
       >
 
         {/* Tiptap Editor Content */}
-        <EditorContent editor={editor} />
+        <Box 
+          sx={{ 
+            padding: 0,                   // Ensure no unwanted padding
+            minHeight: '200px',           // Minimum height for the editor area
+            display: 'flex',              // Ensure content is flexible
+            alignItems: 'stretch',        // Stretch content to fit the container
+           }}
+        >
+          <div className="editor-wrapper">
+
+          <EditorContent
+            editor={editor}
+            style={{
+              width:'100%',                  // Ensure editor fills the container
+              flexGrow: 1,                // Ensures editor grows to fit
+              padding: '10px',            // Inner padding for the editor content
+              display: 'flex'
+            }}
+           />
+          </div>
+
+        </Box>
 
         {/* Save/Delete Buttons */}
         <Collapse in={isFocused} orientation="vertical" 
@@ -149,16 +164,12 @@ const TipTapEditor = (props: Props) => {
                 color={editor?.isActive('strike') ? 'primary' : 'default'}
               ><StrikethroughS /></IconButton>
 
-              <div className='ff'>
 
              <FontFamilySelector editor={editor} />
-             </div>
 
+              <FontSizeSelector editor={editor} />
         </Box>
         <Box mt={2}>
-          <Button onClick={handleSave} variant="contained" color="primary">
-            Save Content
-          </Button>
           <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
             Delete Content
           </Button>
