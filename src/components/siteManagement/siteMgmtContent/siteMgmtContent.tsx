@@ -6,22 +6,29 @@ import { useSiteManagement } from '../../../contexts/siteManagement/siteManageme
 import TipTapEditor from '../editor/TipTapEditor';
 import defaultSections from '../../../contexts/siteManagement/defaultSections';
 import AddSection from './AddWidget';
+import DraggableList from '../../lists/DraggableList';
 
 const SiteManagementContent = () => {
-    const { siteSettings } = useSiteManagement()
+    const { siteSettings, onSaveSitSettings, onSaveSitSettingsTemp } = useSiteManagement()
     const sections = siteSettings?.sections.filter(section => section.enabled) || []
 
-    const onOptionClicked = (option: string) => {
+    const onAddWidgetClicked = (option: string) => {
         console.log(`Selected option: ${option}`);
     }
 
+    const handleReorder = (newOrder: any) => {
+        console.log(newOrder)
+    }
     return (
         <div>
-            {sections.map((section: any) => (
-                <TipTapEditor key={section.name} sectionName={section.name} />
-            ))}
+ 
+            <DraggableList
+                items={sections}
+                onReorder={handleReorder}
+                renderItem={(section) => <TipTapEditor key={section.name} sectionName={section.name} />}
+            />
             {
-                sections.length < defaultSections.length && <AddSection onOptionClicked={onOptionClicked} />
+                sections.length < defaultSections.length && <AddSection onOptionClicked={onAddWidgetClicked} />
             }
         </div>
     )
