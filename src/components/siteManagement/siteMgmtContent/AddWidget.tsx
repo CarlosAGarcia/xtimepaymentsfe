@@ -4,9 +4,10 @@ import AddIcon from '@mui/icons-material/Add';
 
 type Props = {
   onOptionClicked: (option: string) => void;
+  options: string[];
 };
 
-const AddWidget: React.FC<Props> = ({ onOptionClicked }) => {
+const AddWidget: React.FC<Props> = ({ onOptionClicked, options }) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [menuPosition, setMenuPosition] = useState<'below' | 'above'>('below');
 
@@ -29,9 +30,6 @@ const AddWidget: React.FC<Props> = ({ onOptionClicked }) => {
     onOptionClicked(option)
     handleClose();
   }
-
-  // Placeholder options
-  const options = Array.from({ length: 10 }, (_, i) => `Option ${i + 1}`);
 
   return (
     <Box>

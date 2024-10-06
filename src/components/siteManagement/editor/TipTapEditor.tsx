@@ -17,20 +17,24 @@ import { FontSize } from './customExtensions/FontSize';
 
 type Props = {
   sectionName: string;
+  content: string;
+  setContent: (content: string) => void;
 };
 
 const TipTapEditor = (props: Props) => {
-  const { sectionName } = props;
+  const { sectionName, content, setContent } = props;
 
   // CONTEXT vars
   const { getSection, sectionsLoading, sectionErrs, editSection } = useSiteManagement()
   const isLoading = sectionsLoading[sectionName]
   const err = sectionErrs[sectionName]
+
+  // these values are coming from the context 
   const sectionObject = getSection(sectionName)
 
 
   // ############### LOCAL STATE ###############
-  const [content, setContent] = useState('');
+  // const [content, setContent] = useState('');
   const [isFocused, setIsFocused] = useState(false); // To track focus state
 
 
