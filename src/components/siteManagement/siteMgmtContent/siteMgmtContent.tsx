@@ -4,16 +4,25 @@
 import React, { useEffect } from 'react'
 import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
 import TipTapEditor from '../editor/TipTapEditor';
+import defaultSections from '../../../contexts/siteManagement/defaultSections';
+import AddSection from './AddWidget';
 
 const SiteManagementContent = () => {
     const { siteSettings } = useSiteManagement()
-    const sections = siteSettings?.sections || []
+    const sections = siteSettings?.sections.filter(section => section.enabled) || []
+
+    const onOptionClicked = (option: string) => {
+        console.log(`Selected option: ${option}`);
+    }
 
     return (
         <div>
             {sections.map((section: any) => (
                 <TipTapEditor key={section.name} sectionName={section.name} />
             ))}
+            {
+                sections.length < defaultSections.length && <AddSection onOptionClicked={onOptionClicked} />
+            }
         </div>
     )
 }
