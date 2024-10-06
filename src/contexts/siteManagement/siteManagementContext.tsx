@@ -90,22 +90,27 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
         return () => clearInterval(interval);
     }, [ siteSettingsTemp, siteSettings ]);
 
-    const lastSaveTimeRef = useRef<number | null>(null);
+    const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     // Adds auto saving debounce capabilities to setSiteSettingsTempOriginal
     const setSiteSettingsTemp = (newSettings: SiteSettings) => {
         setSiteSettingsTempOriginal(newSettings)
-        const currentTime = Date.now();
-
-        // Check if autoSave has been called in the last 3 seconds
-        if (!lastSaveTimeRef.current || currentTime - lastSaveTimeRef.current >= 3000) {
-            saveTempSiteSettings();
-            lastSaveTimeRef.current = currentTime; // Update the last save time
+    
+        // Clear the previous timer if still running
+        if (debounceTimerRef.current) {
+            clearTimeout(debounceTimerRef.current);
         }
+        // Set up a new debounce timer for 3 seconds
+        debounceTimerRef.current = setTimeout(() => {
+            saveTempSiteSettings(); // Call auto-save if there's no activity for 3 seconds
+        }, 3000); // 3-second delay
     }
 
     useEffect(() => {
         return () => {
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current); // Clear timer on unmount
+              }
             saveTempSiteSettings();
         };
       }, []);
