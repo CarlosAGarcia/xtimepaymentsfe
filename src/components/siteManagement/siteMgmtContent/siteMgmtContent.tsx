@@ -9,15 +9,8 @@ import DraggableList from '../../lists/DraggableList';
 
 const SiteManagementContent = () => {
     const {
-        siteSettings,
-        //  onSaveSitSettings, onSaveSitSettingsTemp 
+        siteSettingsTemp, setSiteSettingsTemp
     } = useSiteManagement()
-
-    // TEMP state - before saving - memory only
-    const [ siteSettingsTemp, setSiteSettingsTemp ] = useState<SiteSettings>({ org: {}, sections: [] })
-    useEffect(() => {
-        if (siteSettings) setSiteSettingsTemp(siteSettings)
-    }, [siteSettings])
 
     // Updates temp settings content for matched section
     const setContentForATempSection = ({ name, content }: { name: string, content: string }) => {
@@ -41,7 +34,7 @@ const SiteManagementContent = () => {
             enabled: true,
             order: siteSettingsTemp?.sections.length
         }
-        
+
         setSiteSettingsTemp({ 
             ...siteSettingsTemp, 
             sections: [ ...newSections, newlyEnabledSection ]
