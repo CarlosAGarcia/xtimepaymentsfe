@@ -11,8 +11,8 @@ interface SiteManagementContextType {
     isGetSiteSettingsLoading: boolean;
     isGetSiteSettingsErr: string;
     siteSettingsTemp: SiteSettings;
-    setSiteSettingsTemp: (newSettings: SiteSettings) => void;
-    saveTempSiteSettings: () => void;
+    setSiteSettingsTemp: (newSettings: SiteSettings, manualSave?: boolean) => void;
+    saveTempSiteSettings: (siteSettingsOverwrite?: SiteSettings) => void;
     lastSaved: Date | undefined;
 
     //EDIT
@@ -63,19 +63,22 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
         if (siteSettings) setSiteSettingsTemp(siteSettings)
     }, [siteSettings])
     const getSection = (section: string) => siteSettings?.sections?.find((s: any) => s.name === section)
+
     // Save temp site settings to db
-    const saveTempSiteSettings = async () => {
-        await axiosInstance.put(`${REACT_APP_API_URL}/api/siteSettings`, siteSettingsTemp, {
+    const saveTempSiteSettings = async (siteSettingsOverwrite?: SiteSettings) => {
+        const siteSettingsNew = siteSettingsOverwrite || siteSettingsTemp
+        await axiosInstance.put(`${REACT_APP_API_URL}/api/siteSettings`, siteSettingsNew, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': `Bearer ${accessToken}`
             }
-        }).then((response: any) => {
+        })
+        .then((response: any) => {
           console.log('TEMP Content saved successfully:', response);
         })
-          .catch((error: any) => {
+        .catch((error: any) => {
             console.error('Error saving TEMP content:', error);
-          });
+        });
     };
 
     // auto saves temp site settings every 5 minutes (300000 ms) if there are changes
@@ -93,17 +96,20 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
     const debounceTimerRef = useRef<NodeJS.Timeout | null>(null);
 
     // Adds auto saving debounce capabilities to setSiteSettingsTempOriginal
-    const setSiteSettingsTemp = (newSettings: SiteSettings) => {
+    const setSiteSettingsTemp = (newSettings: SiteSettings, manualSave?: boolean) => {
         setSiteSettingsTempOriginal(newSettings)
-    
-        // Clear the previous timer if still running
-        if (debounceTimerRef.current) {
-            clearTimeout(debounceTimerRef.current);
+        if (manualSave) {
+            saveTempSiteSettings(newSettings)
+        } else {
+            // Clear the previous timer if still running
+            if (debounceTimerRef.current) {
+                clearTimeout(debounceTimerRef.current);
+            }
+            // Set up a new debounce timer for 3 seconds
+            debounceTimerRef.current = setTimeout(() => {
+                saveTempSiteSettings(); // Call auto-save if there's no activity for 3 seconds
+            }, 3000); // 3-second delay            
         }
-        // Set up a new debounce timer for 3 seconds
-        debounceTimerRef.current = setTimeout(() => {
-            saveTempSiteSettings(); // Call auto-save if there's no activity for 3 seconds
-        }, 3000); // 3-second delay
     }
 
     useEffect(() => {

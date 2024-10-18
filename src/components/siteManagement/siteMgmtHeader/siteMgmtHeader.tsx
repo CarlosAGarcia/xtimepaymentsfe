@@ -142,7 +142,7 @@ export default function SiteManagementHeader() {
                             display: 'flex',
                             
                         }}>
-                        <Button onClick={saveTempSiteSettings} sx={{
+                        <Button onClick={() => saveTempSiteSettings()} sx={{
                         }} >
                             SAVE
                         </Button>  

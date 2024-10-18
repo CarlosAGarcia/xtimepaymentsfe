@@ -88,7 +88,7 @@ const TipTapEditor = (props: Props) => {
   // Delete function - memory only
   const handleDelete = () => {
       // just sets enabled to false for the section
-      setSiteSettingsTemp({
+      const newSiteSettings = {
         ...siteSettingsTemp,
         sections: siteSettingsTemp?.sections.map(section => {
           if (section.name === sectionName) {
@@ -96,7 +96,9 @@ const TipTapEditor = (props: Props) => {
           }
           return section
       })
-    })
+    }
+
+    setSiteSettingsTemp(newSiteSettings, true)
   }
 
 
