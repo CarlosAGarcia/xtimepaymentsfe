@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '../../contexts/auth/authContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
-import TabPanel from '../../components/monitization/TabPanel'
+import TabPanel from '../../components/pages/monitization/TabPanel'
 import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 
 export default function Monetization() {

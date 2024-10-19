@@ -2,8 +2,8 @@
 
 import React from 'react';
 import { Container } from '@mui/material';
-import Header from '../components/headers/Headers';
-import SubHeader from '../components/headers/Subheaders';
+import Header from '../components/common/headers/Headers';
+import SubHeader from '../components/common/headers/Subheaders';
 
 interface HeaderContentLayoutProps {
     title: string;

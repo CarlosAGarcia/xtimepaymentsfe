@@ -2,7 +2,7 @@
 //
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import styles from '../../styling/modules/Headers.module.css';
+import styles from '../../../styling/modules/Headers.module.css'
 
 interface SubheaderProps {
     title: string;

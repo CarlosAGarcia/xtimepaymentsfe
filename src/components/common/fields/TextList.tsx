@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import Typography from '@mui/material/Typography';
-import { CountTokenContext } from '../../contexts/countTokens/countTokens';
+import { CountTokenContext } from '../../../contexts/countTokens/countTokens';
 
 const TextList: React.FC = () => {
     const countTokenContext = useContext(CountTokenContext);

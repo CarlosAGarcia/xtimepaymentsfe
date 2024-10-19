@@ -1,12 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-
 import { Box, Button, Container, Typography, Link, TextField } from '@mui/material';
-import Logo from '../../components/home/Logo';
-import LoginField from '../../components/loginSignup/LoginField';
-import GoBackButton from '../../components/buttons/GoBackButton';
+import Logo from '../../components/pages/home/Logo';
+import GoBackButton from '../../components/common/buttons/GoBackButton';
 import axios from 'axios';
 import { AuthContext } from '../../contexts/auth/authContext';
-// import { slideOut, slideIn } from '../../styling/styling'
 
 let source: any;
 

@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import TextField from '@mui/material/TextField';
-import { CountTokenContext } from '../../contexts/countTokens/countTokens';
+import { CountTokenContext } from '../../../contexts/countTokens/countTokens';
 
 const TokenCountField: React.FC = () => {
     const countTokenContext = useContext(CountTokenContext);

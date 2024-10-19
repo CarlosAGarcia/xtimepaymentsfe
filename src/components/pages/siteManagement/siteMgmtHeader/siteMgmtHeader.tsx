@@ -8,11 +8,12 @@
 */
 
 import React from 'react'
-import { useOrganisation } from '../../../contexts/organisations/organisationContext'
+import { useOrganisation } from '../../../../contexts/organisations/organisationContext'
 import { Button } from '@mui/material';
 import { Box, Collapse } from '@mui/material';
 import OpenInNewIcon from '@mui/icons-material/OpenInNew';
-import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
+import { useSiteManagement } from '../../../../contexts/siteManagement/siteManagementContext';
+import ColorPicker from '../../../common/pickers/ColorPicker';
 
 export default function SiteManagementHeader() {
     const { organisation } = useOrganisation()
@@ -140,8 +141,8 @@ export default function SiteManagementHeader() {
                         sx={{
                             // container flex for buttons
                             display: 'flex',
-                            
                         }}>
+                            <ColorPicker />
                         <Button onClick={() => saveTempSiteSettings()} sx={{
                         }} >
                             SAVE

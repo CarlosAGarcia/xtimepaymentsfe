@@ -1,10 +1,11 @@
 import React, { useEffect } from 'react'
-import SiteManagementHeader from '../../components/siteManagement/siteMgmtHeader/siteMgmtHeader'
-import SiteManagementContent from '../../components/siteManagement/siteMgmtContent/siteMgmtContent'
+import SiteManagementHeader from '../../components/pages/siteManagement/siteMgmtHeader/siteMgmtHeader'
+import SiteManagementContent from '../../components/pages/siteManagement/siteMgmtContent/siteMgmtContent'
 import { useSiteManagement } from '../../contexts/siteManagement/siteManagementContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
 import { useAuth } from '../../contexts/auth/authContext'
 import HeaderContentLayout from '../../layouts/HeaderContentLayout'
+import { Box } from '@mui/material'
 
 /*
     This page would display a demo of the actual site but with editing capabilities.
@@ -33,10 +34,12 @@ export default function SiteManagement() {
 
     return (
         <>
-        <HeaderContentLayout title='' subTitle=''>
-            <SiteManagementHeader />
-            <SiteManagementContent />
-        </HeaderContentLayout>
+        <Box sx={{ height: '100%', width: '100%' }}>
+            <HeaderContentLayout title='' subTitle=''>
+                <SiteManagementHeader />
+                <SiteManagementContent />
+            </HeaderContentLayout>
+        </Box>
         </>
     )
 }

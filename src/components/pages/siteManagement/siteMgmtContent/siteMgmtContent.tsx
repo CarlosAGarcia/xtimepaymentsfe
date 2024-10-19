@@ -2,10 +2,10 @@
 // then it loads each siteSection in an editor that allows the user to edit the content of the site given the section name
 
 import React, { useEffect, useState } from 'react'
-import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
+import { useSiteManagement } from '../../../../contexts/siteManagement/siteManagementContext';
 import TipTapEditor from '../editor/TipTapEditor';
 import AddSection from './AddWidget';
-import DraggableList from '../../lists/DraggableList';
+import DraggableList from '../../../common/lists/DraggableList';
 
 const SiteManagementContent = () => {
     const {

@@ -6,7 +6,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 // import InboxIcon from '@mui/icons-material/Inbox';
 import LogoutIcon from '@mui/icons-material/Logout';
-import { useAuth } from '../../contexts/auth/authContext';
+import { useAuth } from '../../../contexts/auth/authContext';
 
 
 const RightSideBar = () => {
