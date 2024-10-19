@@ -52,17 +52,15 @@ const SiteManagementContent = () => {
     const sections = siteSettingsTemp?.sections.filter(section => section.enabled) || []
     return (
         <div>
- 
-            <DraggableList
-                items={sections}
-                onReorder={handleReorder}
-                renderItem={(section) => <TipTapEditor 
+            
+            {
+                sections.map((section) => <TipTapEditor 
                     key={section.name} 
                     sectionName={section.name}
                     content={section.content}
                     setContent={(content) => setContentForATempSection({ name: section.name, content })}
-                />}
-            />
+                />)
+            }
             {
                 siteSettingsTemp?.sections.find(section => !section.enabled) && <AddSection onOptionClicked={onAddWidgetClicked} options={optionsAvailableToAdd}/>
             }
