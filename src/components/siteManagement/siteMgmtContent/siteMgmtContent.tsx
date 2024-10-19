@@ -28,17 +28,20 @@ const SiteManagementContent = () => {
     const onAddWidgetClicked = (option: string) => {
         const sectionToEnable = siteSettingsTemp?.sections.find(section => section.name === option)
         if (!sectionToEnable) return
-        const newSections = siteSettingsTemp?.sections.filter(section => section.name !== option) || []
-        const newlyEnabledSection = {
-            ...sectionToEnable,
-            enabled: true,
-            order: siteSettingsTemp?.sections.length
+
+        // changes the enabled flag to true when the name matches the option
+        const newSections = siteSettingsTemp?.sections.map(section => {
+            if (section.name === option) {
+                return { ...section, enabled: true }
+            }
+            return section
         }
+        ) || []
 
         setSiteSettingsTemp({ 
             ...siteSettingsTemp, 
-            sections: [ ...newSections, newlyEnabledSection ]
-        })
+            sections: newSections
+        }, true)
     }
 
     const handleReorder = (newOrder: Section[]) => {
