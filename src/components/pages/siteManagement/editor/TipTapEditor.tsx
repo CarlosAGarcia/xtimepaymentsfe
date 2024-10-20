@@ -106,7 +106,7 @@ const TipTapEditor = (props: Props) => {
 
 
   return (
-    <div
+    <Box
       onBlur={() => isFocused ? setIsFocused(false) : undefined}
       onFocus={() => !isFocused && setIsFocused(true)}
     >
@@ -196,7 +196,7 @@ const TipTapEditor = (props: Props) => {
         {err && <div>{err}</div>}
 
       </Box>
-    </div>
+    </Box>
   );
 };
 

@@ -6,6 +6,16 @@ import { useOrganisation } from '../../contexts/organisations/organisationContex
 import { useAuth } from '../../contexts/auth/authContext'
 import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 import { Box } from '@mui/material'
+import { keyframes } from '@mui/system';
+
+const waterfall = keyframes`
+  0% {
+    background-position: 0 -100%;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+`;
 
 /*
     This page would display a demo of the actual site but with editing capabilities.
@@ -40,9 +50,23 @@ export default function SiteManagement() {
         return <div>Error...</div>
     }
 
+    
     return (
         <>
-        <Box sx={{ height: '100%', width: '100%', backgroundColor: backgroundColor, transition: 'background-color 0.25s ease-in-out' }}>
+        <Box
+      sx={{
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: backgroundColor,
+        backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, transparent)`,
+        backgroundSize: '100% 200%',
+        backgroundPosition: '0 -100%',
+        animation: `${waterfall} 0.25s ease-in-out forwards`,
+        transition: 'background-color 0.25s ease-in-out',
+      }}
+      >
             <HeaderContentLayout title='' subTitle=''>
                 <SiteManagementHeader />
                 <SiteManagementContent />
