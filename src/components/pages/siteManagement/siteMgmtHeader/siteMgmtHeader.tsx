@@ -7,7 +7,7 @@
     the next component would just be the 'CONTENT' component that would allow the user to edit the content of the site.
 */
 
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useOrganisation } from '../../../../contexts/organisations/organisationContext'
 import { Button } from '@mui/material';
 import { Box, Collapse } from '@mui/material';
@@ -17,16 +17,21 @@ import ColorPicker from '../../../common/pickers/ColorPicker';
 
 export default function SiteManagementHeader() {
     const { organisation } = useOrganisation()
-    const { saveTempSiteSettings } = useSiteManagement()
-
+    const { saveTempSiteSettings, setSiteSettingsTemp, siteSettingsTemp } = useSiteManagement()
     const [isOpen, setIsOpen] = React.useState(false)
 
-    const saveChanges = () => { 
-        // save changes to the site
-    }
+    const [backgroundColor, setBackgroundColor] = React.useState('#dfdcf5')
+    useEffect(() => {
+        if (siteSettingsTemp?.backgroundColor && siteSettingsTemp.backgroundColor !== backgroundColor) {
+            handleColorChange(siteSettingsTemp.backgroundColor)
+        }
+    }, [siteSettingsTemp, backgroundColor])
 
-    const reset = () => {
-        // reset the site to the last saved version
+    const handleColorChange = (color: string) => {
+        if (color !== backgroundColor) {
+            setBackgroundColor(color)
+            setSiteSettingsTemp({ ...siteSettingsTemp, backgroundColor: color }, true)
+        }
     }
 
     // site url is this website url + /organisation?.name
@@ -90,40 +95,27 @@ export default function SiteManagementHeader() {
                         <h1>{`${organisation?.name}`}</h1>
                     </Box>
                 </Box>
+                <Box sx={{
+
+                }}>
+                    <h3>
+                        Edit your site and preview changes before publishing ✎
+                    </h3>
+                    <h3>
+                        Dont worry, changes are saved automatically and not published until you hit the big green button ✅
+                    </h3>
+                    <h3>
+                        This section won't appear on the live site 😶‍🌫️
+                    </h3>
+                </Box>
                     
                 <Collapse in={isOpen}>
                     {/* DESCRIPTION */}
-
                     <Box>
                         <p>
                             This is a demo page - Edit contents and preview changes before publishing.
                         </p>
-                        <div>
-                            {/* <button>
-                                <Button variant="contained" color="primary" onClick={reset}>
-                                    RESET
-                                </Button>
-                            </button>
-                            <button>
-                                <Button variant="contained" color="primary" onClick={saveChanges}>
-                                    Publish
-                                </Button>
-                            </button> */}
-                        </div>
                     </Box>
-
-                    {/* LINKS */}
-                    {/* <Box
-                        sx={{
-                            p: 2,
-                            backgroundColor: '#f0f0f0',
-                            borderRadius: '8px',
-                        }}
-                    >
-                        LINKS HERE !!
-                        
-                    </Box> */}
-                    
                 </Collapse>
 
                 {/* BOT BUTTONs */}
@@ -142,10 +134,25 @@ export default function SiteManagementHeader() {
                             // container flex for buttons
                             display: 'flex',
                         }}>
-                            <ColorPicker />
-                        <Button onClick={() => saveTempSiteSettings()} sx={{
+                            <ColorPicker 
+                                color={backgroundColor}
+                                handleColorChange={handleColorChange}
+                            />
+                         <Button onClick={() => saveTempSiteSettings()} sx={{
+                            background: '#d4d41e',
+                            color: '#fff',
+                            marginRight: '1rem',
+                            borderRadius: '8px',
                         }} >
-                            SAVE
+                            SAVE ✎
+                        </Button>
+                        <Button onClick={() => saveTempSiteSettings()} sx={{
+                            background: '#4caf50',
+                            color: '#fff',
+                            marginRight: '1rem',
+                            borderRadius: '8px',
+                        }} >
+                            PUBLISH ✔︎
                         </Button>  
 
                         {/* OPENS TEST URL IN NEW TAB */}
@@ -168,12 +175,6 @@ export default function SiteManagementHeader() {
                 </Box>
 
             </Box>
-
-            {/* <Analytics /> */}
-            {/* <LiveSite /> */}
-            {/* <SiteLinks /> */}
-            {/* <Content /> */}
-
         </div>
     )
 }

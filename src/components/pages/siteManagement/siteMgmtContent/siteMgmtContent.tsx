@@ -24,6 +24,19 @@ const SiteManagementContent = () => {
         setSiteSettingsTemp({ ...siteSettingsTemp, sections: newSections })
     }
 
+    const setBackgroundColorForATempSection = ({ name, backgroundColor }: { name: string, backgroundColor: string }) => {
+        if (!siteSettingsTemp) return
+        const newSections = siteSettingsTemp.sections.map(section => {
+            if (section.name === name) {
+                return { ...section, backgroundColor }
+            }
+            return section
+        })
+
+        setSiteSettingsTemp({ ...siteSettingsTemp, sections: newSections }, true)
+    }
+
+
     // updates the corresponding section in temp settings to enabled and moves it to last in the order
     const onAddWidgetClicked = (option: string) => {
         const sectionToEnable = siteSettingsTemp?.sections.find(section => section.name === option)
@@ -61,7 +74,9 @@ const SiteManagementContent = () => {
                     key={section.name} 
                     sectionName={section.name}
                     content={section.content}
+                    backgroundColor={section.backgroundColor}
                     setContent={(content) => setContentForATempSection({ name: section.name, content })}
+                    setBackgroundColorForATempSection={(backgroundColor) => setBackgroundColorForATempSection({ name: section.name, backgroundColor })}
                 />)
             }
             {

@@ -57,7 +57,7 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
         }
     }
     // Memory data
-    const [ siteSettingsTemp, setSiteSettingsTempOriginal ] = useState<SiteSettings>({ org: {}, sections: [] })
+    const [ siteSettingsTemp, setSiteSettingsTempOriginal ] = useState<SiteSettings>({ org: {}, sections: [], isActive: false, backgroundColor: '#dfdcf5' })
     const [ lastSaved, setLastSaved ] = useState<Date>()
     useEffect(() => {
         if (siteSettings) setSiteSettingsTemp(siteSettings)
@@ -117,7 +117,7 @@ const SiteManagementProvider: React.FC<{ children: React.ReactNode }> = ({ child
             if (debounceTimerRef.current) {
                 clearTimeout(debounceTimerRef.current); // Clear timer on unmount
               }
-            saveTempSiteSettings();
+            if (siteSettings && JSON.stringify(siteSettingsTemp) !== JSON.stringify(siteSettings)) saveTempSiteSettings();
         };
       }, []);
 

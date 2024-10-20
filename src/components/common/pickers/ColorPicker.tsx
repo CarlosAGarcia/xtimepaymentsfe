@@ -4,16 +4,17 @@ import { Colorize } from '@mui/icons-material';
 import { SketchPicker, ColorResult } from 'react-color';
 import { SyntheticEvent } from 'react';
 
-const ColorPicker: React.FC = () => {
-  // State to manage background color
-  const [backgroundColor, setBackgroundColor] = useState<string>('#808080'); // Default grey
+// types for color and handleColorChange
+type ColorPickerProps = {
+  color: string;
+  handleColorChange: (color: string) => void;
+};
+
+const ColorPicker: React.FC<ColorPickerProps> = (props: ColorPickerProps) => {
+  const { color, handleColorChange } = props;
+
   // State to handle popover for color picker
   const [anchorEl, setAnchorEl] = useState<HTMLButtonElement | null>(null);
-
-  // Handle color change from color picker
-  const handleColorChange = (color: ColorResult) => {
-    setBackgroundColor(color.hex);
-  };
 
   // Handle opening of the color picker popover
   const handleOpenPopover = (event: SyntheticEvent<HTMLButtonElement>) => {
@@ -28,10 +29,11 @@ const ColorPicker: React.FC = () => {
   const open = Boolean(anchorEl);
   const id = open ? 'color-picker-popover' : undefined;
 
+  console.log('color RENDER:', color);
   return (
     <Box
       sx={{
-        backgroundColor: backgroundColor,
+        backgroundColor: color,
         padding: 2,
         borderRadius: 2,
       }}
@@ -59,8 +61,11 @@ const ColorPicker: React.FC = () => {
           }}
         >
           <SketchPicker
-            color={backgroundColor}
-            onChangeComplete={handleColorChange}
+            color={color}
+            onChangeComplete={(colorRes) => {
+              console.log('color ON CHANGE??:',{ hex: colorRes.hex, color });
+              handleColorChange(colorRes.hex)
+            }}
           />
         </Popover>
       </Box>

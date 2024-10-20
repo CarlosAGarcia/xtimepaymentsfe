@@ -15,9 +15,17 @@ import { Box } from '@mui/material'
 */
 export default function SiteManagement() {
     // gets the user obejct from authContext
-    const { getSiteSettings, isGetSiteSettingsLoading, isGetSiteSettingsErr } = useSiteManagement()
+    const { getSiteSettings, isGetSiteSettingsLoading, isGetSiteSettingsErr, siteSettingsTemp } = useSiteManagement()
     const { getOrganisationById } = useOrganisation()
     const { user } = useAuth()
+
+    const [backgroundColor, setBackgroundColor] = React.useState('#dfdcf5')
+    useEffect(() => {
+        if (siteSettingsTemp?.backgroundColor && siteSettingsTemp.backgroundColor !== backgroundColor) {
+            setBackgroundColor(siteSettingsTemp.backgroundColor)
+        }
+    }, [siteSettingsTemp, backgroundColor])
+
 
     // on load and on every user.organisation._id change, fetch the organisation data with getOrganisationById and the id
     useEffect(() => {
@@ -34,7 +42,7 @@ export default function SiteManagement() {
 
     return (
         <>
-        <Box sx={{ height: '100%', width: '100%' }}>
+        <Box sx={{ height: '100%', width: '100%', backgroundColor: backgroundColor, transition: 'background-color 0.25s ease-in-out' }}>
             <HeaderContentLayout title='' subTitle=''>
                 <SiteManagementHeader />
                 <SiteManagementContent />

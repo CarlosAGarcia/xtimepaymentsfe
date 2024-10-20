@@ -14,15 +14,18 @@ import FontFamilySelector from './components/FontFamilySelector';
 import './EditorStyles.css'; // Import custom CSS for styling
 import FontSizeSelector from './components/FontSizeSelector';
 import { FontSize } from './customExtensions/FontSize';
+import ColorPicker from '../../../common/pickers/ColorPicker';
 
 type Props = {
   sectionName: string;
   content: string;
+  backgroundColor: string;
   setContent: (content: string) => void;
+  setBackgroundColorForATempSection: (backgroundColor: string) => void;
 };
 
 const TipTapEditor = (props: Props) => {
-  const { sectionName, content, setContent } = props;
+  const { sectionName, content, setContent, backgroundColor, setBackgroundColorForATempSection } = props;
 
   // CONTEXT vars
   const { siteSettingsTemp, setSiteSettingsTemp, sectionErrs } = useSiteManagement()
@@ -109,7 +112,7 @@ const TipTapEditor = (props: Props) => {
     >
       <Box
         sx={{ 
-          backgroundColor: 'lightgray', 
+          backgroundColor: backgroundColor, 
           marginBottom: '.5rem', 
           padding: '1rem 1rem 0 1rem', 
           position: 'relative' }}
@@ -179,6 +182,8 @@ const TipTapEditor = (props: Props) => {
                 <FontFamilySelector editor={editor} />
 
                   <FontSizeSelector editor={editor} />
+
+                <ColorPicker color={backgroundColor} handleColorChange={setBackgroundColorForATempSection}  />
             </Box>
             <Box mt={2}>
               <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
