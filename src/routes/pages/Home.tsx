@@ -1,15 +1,15 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Container from '@mui/material/Container';
-import Logo from '../../components/home/Logo';
-import TokenCountField from '../../components/fields/TokenCountField';
-import ButtonComponent from '../../components/buttons/Button1';
-import LoginButton from '../../components/buttons/LoginButton';
-import TextList from '../../components/fields/TextList';
+import Logo from '../../components/pages/home/Logo';
+import TokenCountField from '../../components/common/fields/TokenCountField';
+import ButtonComponent from '../../components/common/buttons/Button1';
+import LoginButton from '../../components/common/buttons/LoginButton';
+import TextList from '../../components/common/fields/TextList';
 import { Paper } from '@mui/material';
-import SubTitle from '../../components/home/SubTitle';
+import SubTitle from '../../components/pages/home/SubTitle';
 import { CountTokenContextProvider } from '../../contexts/countTokens/countTokens';
-import SubHeader from '../../components/headers/Subheaders';
+import SubHeader from '../../components/common/headers/Subheaders';
 
 const Home: React.FC = () => {
   return (

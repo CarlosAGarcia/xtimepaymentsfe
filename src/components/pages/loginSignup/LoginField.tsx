@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Box, Button, Link, TextField } from '@mui/material';
 import axios from 'axios';
-import { AuthContext } from '../../contexts/auth/authContext';
-import { slideOut, slideIn } from '../../styling/styling'
+import { AuthContext } from '../../../contexts/auth/authContext';
+import { slideIn, slideOut } from '../../../styling/styling';
 
 let source: any;
 const LoginField: React.FC = () => {

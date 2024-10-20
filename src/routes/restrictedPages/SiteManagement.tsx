@@ -1,10 +1,21 @@
 import React, { useEffect } from 'react'
-import SiteManagementHeader from '../../components/siteManagement/siteMgmtHeader/siteMgmtHeader'
-import SiteManagementContent from '../../components/siteManagement/siteMgmtContent/siteMgmtContent'
+import SiteManagementHeader from '../../components/pages/siteManagement/siteMgmtHeader/siteMgmtHeader'
+import SiteManagementContent from '../../components/pages/siteManagement/siteMgmtContent/siteMgmtContent'
 import { useSiteManagement } from '../../contexts/siteManagement/siteManagementContext'
 import { useOrganisation } from '../../contexts/organisations/organisationContext'
 import { useAuth } from '../../contexts/auth/authContext'
 import HeaderContentLayout from '../../layouts/HeaderContentLayout'
+import { Box } from '@mui/material'
+import { keyframes } from '@mui/system';
+
+const waterfall = keyframes`
+  0% {
+    background-position: 0 -100%;
+  }
+  100% {
+    background-position: 0 100%;
+  }
+`;
 
 /*
     This page would display a demo of the actual site but with editing capabilities.
@@ -14,9 +25,17 @@ import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 */
 export default function SiteManagement() {
     // gets the user obejct from authContext
-    const { getSiteSettings, isGetSiteSettingsLoading, isGetSiteSettingsErr } = useSiteManagement()
+    const { getSiteSettings, isGetSiteSettingsLoading, isGetSiteSettingsErr, siteSettingsTemp } = useSiteManagement()
     const { getOrganisationById } = useOrganisation()
     const { user } = useAuth()
+
+    const [backgroundColor, setBackgroundColor] = React.useState('#dfdcf5')
+    useEffect(() => {
+        if (siteSettingsTemp?.backgroundColor && siteSettingsTemp.backgroundColor !== backgroundColor) {
+            setBackgroundColor(siteSettingsTemp.backgroundColor)
+        }
+    }, [siteSettingsTemp, backgroundColor])
+
 
     // on load and on every user.organisation._id change, fetch the organisation data with getOrganisationById and the id
     useEffect(() => {
@@ -31,12 +50,28 @@ export default function SiteManagement() {
         return <div>Error...</div>
     }
 
+    
     return (
         <>
-        <HeaderContentLayout title='' subTitle=''>
-            <SiteManagementHeader />
-            <SiteManagementContent />
-        </HeaderContentLayout>
+        <Box
+      sx={{
+        height: '100%',
+        width: '100%',
+        position: 'relative',
+        overflow: 'hidden',
+        backgroundColor: backgroundColor,
+        backgroundImage: `linear-gradient(to bottom, ${backgroundColor}, transparent)`,
+        backgroundSize: '100% 200%',
+        backgroundPosition: '0 -100%',
+        animation: `${waterfall} 0.25s ease-in-out forwards`,
+        transition: 'background-color 0.25s ease-in-out',
+      }}
+      >
+            <HeaderContentLayout title='' subTitle=''>
+                <SiteManagementHeader />
+                <SiteManagementContent />
+            </HeaderContentLayout>
+        </Box>
         </>
     )
 }

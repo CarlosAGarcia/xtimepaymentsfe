@@ -1,5 +1,7 @@
 import React from 'react';
 import { Reorder, motion, AnimatePresence } from 'framer-motion';
+import IconButton from '@mui/material/IconButton';
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 
 interface DraggableListProps<T> {
   items: T[];
@@ -36,11 +38,35 @@ const DraggableList = <T extends { name: string }>({
               marginBottom: '10px',
               borderRadius: '10px',
               background: 'lightgray',
-              padding: '20px',
-              cursor: 'grab',
+              padding: '0', // Remove padding from the Reorder.Item itself
+              position: 'relative',
             }}
           >
-            {renderItem(item)}
+            {/* Add a draggable handle at the top left of the item */}
+            <div
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                padding: '10px 20px',
+                background: 'darkgray',
+                borderTopLeftRadius: '10px',
+                borderTopRightRadius: '10px',
+              }}
+            >
+              <IconButton
+                style={{ cursor: 'grab', marginRight: '10px' }}
+                disableRipple
+              >
+                <DragIndicatorIcon />
+              </IconButton>
+            </div>
+            <div
+              style={{
+                padding: '20px',
+              }}
+            >
+              {renderItem(item)}
+            </div>
           </Reorder.Item>
         ))}
       </AnimatePresence>

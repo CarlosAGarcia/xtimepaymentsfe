@@ -1,9 +1,9 @@
 import React from 'react';
 import { Box, Container, Typography, Link } from '@mui/material';
-import Logo from '../../components/home/Logo';
-import ThirdPartyAuth from '../../components/loginSignup/ThirdPartyAuth';
-import SignUpField from '../../components/loginSignup/SignUpField';
-import GoBackButton from '../../components/buttons/GoBackButton';
+import Logo from '../../components/pages/home/Logo';
+import ThirdPartyAuth from '../../components/pages/loginSignup/ThirdPartyAuth';
+import SignUpField from '../../components/pages/loginSignup/SignUpField';
+import GoBackButton from '../../components/common/buttons/GoBackButton';
 
 const SignUpPage: React.FC = () => {
     return (

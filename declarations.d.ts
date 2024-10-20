@@ -8,6 +8,7 @@ type Section = {
     enabled: boolean;
     name: string;
     order?: number;
+    backgroundColor: string;
     content: string;
     createdAt?: Date;
     updatedAt?: Date;
@@ -16,5 +17,7 @@ type Section = {
 // org is a ref to the org, sections is an array of Section types
 type SiteSettings = {
     org: any;
+    isActive: boolean;
+    backgroundColor: string;
     sections: Section[];
 }

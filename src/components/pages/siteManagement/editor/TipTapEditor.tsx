@@ -4,7 +4,7 @@ import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
 import Heading from '@tiptap/extension-heading';
 import { useEffect, useState } from 'react';
-import { useSiteManagement } from '../../../contexts/siteManagement/siteManagementContext';
+import { useSiteManagement } from '../../../../contexts/siteManagement/siteManagementContext';
 import { Box, Button, IconButton, Collapse } from '@mui/material';
 import Strike from '@tiptap/extension-strike';
 import { FormatBold, FormatItalic, StrikethroughS } from '@mui/icons-material';
@@ -14,15 +14,18 @@ import FontFamilySelector from './components/FontFamilySelector';
 import './EditorStyles.css'; // Import custom CSS for styling
 import FontSizeSelector from './components/FontSizeSelector';
 import { FontSize } from './customExtensions/FontSize';
+import ColorPicker from '../../../common/pickers/ColorPicker';
 
 type Props = {
   sectionName: string;
   content: string;
+  backgroundColor: string;
   setContent: (content: string) => void;
+  setBackgroundColorForATempSection: (backgroundColor: string) => void;
 };
 
 const TipTapEditor = (props: Props) => {
-  const { sectionName, content, setContent } = props;
+  const { sectionName, content, setContent, backgroundColor, setBackgroundColorForATempSection } = props;
 
   // CONTEXT vars
   const { siteSettingsTemp, setSiteSettingsTemp, sectionErrs } = useSiteManagement()
@@ -88,7 +91,7 @@ const TipTapEditor = (props: Props) => {
   // Delete function - memory only
   const handleDelete = () => {
       // just sets enabled to false for the section
-      setSiteSettingsTemp({
+      const newSiteSettings = {
         ...siteSettingsTemp,
         sections: siteSettingsTemp?.sections.map(section => {
           if (section.name === sectionName) {
@@ -96,17 +99,23 @@ const TipTapEditor = (props: Props) => {
           }
           return section
       })
-    })
+    }
+
+    setSiteSettingsTemp(newSiteSettings, true)
   }
 
 
   return (
-    <div
+    <Box
       onBlur={() => isFocused ? setIsFocused(false) : undefined}
       onFocus={() => !isFocused && setIsFocused(true)}
     >
       <Box
-        sx={{ backgroundColor: 'lightgray', marginBottom: '.5rem', padding: '1rem', position: 'relative' }}
+        sx={{ 
+          backgroundColor: backgroundColor, 
+          marginBottom: '.5rem', 
+          padding: '1rem 1rem 0 1rem', 
+          position: 'relative' }}
         tabIndex={-1} // Make the Box focusable
       >
 
@@ -126,7 +135,7 @@ const TipTapEditor = (props: Props) => {
             style={{
               width:'100%',                  // Ensure editor fills the container
               flexGrow: 1,                // Ensures editor grows to fit
-              padding: '10px',            // Inner padding for the editor content
+              // padding: '10px',            // Inner padding for the editor content
               display: 'flex'
             }}
            />
@@ -139,47 +148,55 @@ const TipTapEditor = (props: Props) => {
           easing={{ enter: 'ease-out', exit: 'ease-in' }}  // Smooth easing
           sx={{ mt: 2, transition: 'all 0.5s ease' }}  // Smooth transition for the buttons as well
         >
-        <Box
-              sx={{
-                display: 'flex',
-                gap: 1,
-                mb: 2,
-                backgroundColor: '#f5f5f5',
-                padding: '10px',
-                borderRadius: '4px',
-              }}
-            >
-              <IconButton
-                onClick={() => editor?.chain().focus().toggleBold().run()}
-                color={editor?.isActive('bold') ? 'primary' : 'default'}
-              ><FormatBold /></IconButton>
+          <Box
+            sx={{
+            paddingBottom: '1rem',
+            }}
+          >
+            <Box
+                  sx={{
+                    display: 'flex',
+                    gap: 1,
+                    mb: 2,
+                    backgroundColor: '#f5f5f5',
+                    padding: '10px',
+                    borderRadius: '4px',
+                  }}
+                >
+                  <IconButton
+                    onClick={() => editor?.chain().focus().toggleBold().run()}
+                    color={editor?.isActive('bold') ? 'primary' : 'default'}
+                  ><FormatBold /></IconButton>
 
-              <IconButton
-                onClick={() => editor?.chain().focus().toggleItalic().run()}
-                color={editor?.isActive('italic') ? 'primary' : 'default'}
-              ><FormatItalic /></IconButton>
+                  <IconButton
+                    onClick={() => editor?.chain().focus().toggleItalic().run()}
+                    color={editor?.isActive('italic') ? 'primary' : 'default'}
+                  ><FormatItalic /></IconButton>
 
-              <IconButton
-                onClick={() => editor?.chain().focus().toggleStrike().run()}
-                color={editor?.isActive('strike') ? 'primary' : 'default'}
-              ><StrikethroughS /></IconButton>
+                  <IconButton
+                    onClick={() => editor?.chain().focus().toggleStrike().run()}
+                    color={editor?.isActive('strike') ? 'primary' : 'default'}
+                  ><StrikethroughS /></IconButton>
 
 
-             <FontFamilySelector editor={editor} />
+                <FontFamilySelector editor={editor} />
 
-              <FontSizeSelector editor={editor} />
-        </Box>
-        <Box mt={2}>
-          <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
-            Delete Content
-          </Button>
-        </Box>
+                  <FontSizeSelector editor={editor} />
+
+                <ColorPicker color={backgroundColor} handleColorChange={setBackgroundColorForATempSection}  />
+            </Box>
+            <Box mt={2}>
+              <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
+                Delete Content
+              </Button>
+            </Box>
+          </Box>
         </Collapse>
 
         {err && <div>{err}</div>}
 
       </Box>
-    </div>
+    </Box>
   );
 };
 

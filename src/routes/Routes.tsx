@@ -19,18 +19,21 @@ function AppRoutes() {
   return (
     <Router>
       <Routes>
+
+        {/* PUBLIC */}
         <Route path="/" element={<Home />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/smh" element={<ForgotPass />} />
         <Route path="/verify" element={<VerifyPage />} />
-
         <Route path="/signup" element={<SignUpPage />} />
 
+        {/* RESTRICTED */}
         <Route path="/dashboard" element={<RestrictedRoute component={<Dashboard/>} />} />
         <Route path="/siteManagement" element={<RestrictedRoute component={<SiteManagement/>} />} />
         <Route path="/monetization" element={<RestrictedRoute component={<Monetization/>} />} />
         <Route path="/billing" element={<RestrictedRoute component={<Billing/>} />} />
 
+        {/* ERROR */}
         <Route path="*" element={<NotFound />} />
       </Routes>
     </Router>

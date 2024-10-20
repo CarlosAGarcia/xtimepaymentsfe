@@ -1,11 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../../contexts/auth/authContext';
+import { useAuth } from '../../../contexts/auth/authContext';
 
 const LoginButton: React.FC = () => {
     const navigate = useNavigate();
-    const { accessToken } = useAuth();  // <<-- why is this undefined?
+    const { accessToken } = useAuth();
   
     console.log('accessToken:', accessToken);
     const isLoggedIn = !!accessToken

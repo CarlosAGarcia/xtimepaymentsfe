@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, IconButton, InputAdornment, TextField, Link } from '@mui/material';
 import axios from 'axios';
-import { AuthContext } from '../../contexts/auth/authContext';
+import { AuthContext } from '../../../contexts/auth/authContext';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 
