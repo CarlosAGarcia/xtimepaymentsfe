@@ -14,7 +14,7 @@ export default function Monetization() {
         if (user?.organisation?._id && !isGetOrganisationByIdLoading) {
             getOrganisationById(user.organisation._id)
         }
-    }, [user?.organisation?._id])
+    }, [user?.organisation?._id, getOrganisationById])
 
     return (
         <HeaderContentLayout title='MONETIZATION' subTitle=''>
