@@ -1,12 +1,10 @@
-// exports the organisation context along with the following variables:
-// organisation, getOrganisationById, isGetOrganisationByIdLoading, isGetOrganisationByIdErr, getOrganisationByUserId
 import React, { createContext, useContext, useState } from 'react'
 import { useAuth } from '../auth/authContext'
 import axiosInstance from '../api';
 
 interface OrganisationContextType {
     organisation: any;
-    getOrganisationById: (id: string) => void;
+    getOrganisationById: (id: string, updateCache?: boolean) => void;
     isGetOrganisationByIdLoading: boolean;
     isGetOrganisationByIdErr: boolean;
 }
@@ -23,7 +21,13 @@ const OrganisationContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
     const [isGetOrganisationByIdLoading, setIsGetOrganisationByIdLoading] = useState<boolean>(false)
     const [isGetOrganisationByIdErr, setIsGetOrganisationByIdErr] = useState<boolean>(false)
 
-    const getOrganisationById = async (id: string) => {
+    const getOrganisationById = async (id: string, updateCache = false) => {
+        if (organisation?._id === id && !updateCache) {
+            const diff = (new Date().getTime() - new Date(organisation?.lastUpdated).getTime()) / 1000
+            // if diff is greater than 5 minutes in seconds, update the cache
+            if (diff < 300) return
+        }
+
         try {
             setIsGetOrganisationByIdLoading(true)
             await axiosInstance.get(`${REACT_APP_API_URL}/api/organisations/${id}`, {
@@ -32,7 +36,7 @@ const OrganisationContextProvider: React.FC<{ children: React.ReactNode }> = ({ 
                 }
             })
                 .then((response: any) => {
-                    setOrganisation(response.data)
+                    setOrganisation({ ...response.data, lastUpdated: new Date() })
                     setIsGetOrganisationByIdLoading(false)
                     setIsGetOrganisationByIdErr(false)
                 })

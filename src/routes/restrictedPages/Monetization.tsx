@@ -7,11 +7,11 @@ import HeaderContentLayout from '../../layouts/HeaderContentLayout'
 export default function Monetization() {
     // gets the user obejct from authContext
     const { user } = useAuth()
-    const { organisation, getOrganisationById, isGetOrganisationByIdLoading, isGetOrganisationByIdErr } = useOrganisation()
+    const { getOrganisationById, isGetOrganisationByIdLoading } = useOrganisation()
 
     // on load and on every user.organisation._id change, fetch the organisation data with getOrganisationById and the id
     useEffect(() => {
-        if (user?.organisation?._id) {
+        if (user?.organisation?._id && !isGetOrganisationByIdLoading) {
             getOrganisationById(user.organisation._id)
         }
     }, [user?.organisation?._id])
