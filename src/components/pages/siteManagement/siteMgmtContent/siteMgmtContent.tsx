@@ -57,18 +57,10 @@ const SiteManagementContent = () => {
         }, true)
     }
 
-    const handleReorder = (newOrder: Section[]) => {
-        console.log('new Order', newOrder)
-        newOrder.forEach((section, index) => {
-            setContentForATempSection({ name: section.name, content: section.content })
-        })
-    }
-
     const optionsAvailableToAdd = siteSettingsTemp?.sections.filter(section => !section.enabled).map(section => section.name) || []
     const sections = siteSettingsTemp?.sections.filter(section => section.enabled) || []
     return (
         <div>
-            
             {
                 sections.map((section) => <TipTapEditor 
                     key={section.name} 

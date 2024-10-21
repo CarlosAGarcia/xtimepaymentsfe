@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit'
 import Bold from '@tiptap/extension-bold';
 import Italic from '@tiptap/extension-italic';
+import TextAlign from '@tiptap/extension-text-align';
 import Heading from '@tiptap/extension-heading';
 import { useEffect, useState } from 'react';
 import { useSiteManagement } from '../../../../contexts/siteManagement/siteManagementContext';
@@ -15,6 +16,7 @@ import './EditorStyles.css'; // Import custom CSS for styling
 import FontSizeSelector from './components/FontSizeSelector';
 import { FontSize } from './customExtensions/FontSize';
 import ColorPicker from '../../../common/pickers/ColorPicker';
+import TextAlignButtons from './components/TextAlignButtons';
 
 type Props = {
   sectionName: string;
@@ -38,17 +40,16 @@ const TipTapEditor = (props: Props) => {
   // ############### UPDATES EDITOR CONTENT ON LOAD ###############
   const editor = useEditor({
     extensions: [
-      StarterKit, 
+      StarterKit,
+      TextAlign.configure({
+        types: ['heading', 'paragraph'], // Specify which node types you want to align
+      }),
       Bold, Italic, Heading, Strike,
       TextStyle,  // Required for handling inline text styles
       FontSize,
-      // FontSize.configure({
-      //   types: ['textStyle'],  // Ensure it applies to textStyle
-      // }),
       FontFamily.configure({
         types: ['textStyle'],  // Ensure it applies to textStyle
       }),
-      // TextAlign.configure({ types: ['heading', 'paragraph'] })
     ],
     content: content,
     onFocus: () => setIsFocused(true),
@@ -182,7 +183,7 @@ const TipTapEditor = (props: Props) => {
                 <FontFamilySelector editor={editor} />
 
                   <FontSizeSelector editor={editor} />
-
+                  <TextAlignButtons editor={editor} />
                 <ColorPicker color={backgroundColor} handleColorChange={setBackgroundColorForATempSection}  />
             </Box>
             <Box mt={2}>
