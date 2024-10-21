@@ -17,6 +17,7 @@ import FontSizeSelector from './components/FontSizeSelector';
 import { FontSize } from './customExtensions/FontSize';
 import ColorPicker from '../../../common/pickers/ColorPicker';
 import TextAlignButtons from './components/TextAlignButtons';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 type Props = {
   sectionName: string;
@@ -116,8 +117,11 @@ const TipTapEditor = (props: Props) => {
           backgroundColor: backgroundColor, 
           marginBottom: '.5rem', 
           padding: '1rem 1rem 0 1rem', 
-          position: 'relative' }}
+          position: 'relative',
+          border: isFocused ? '1px solid #9d9d9d' : '1px solid transparent',
+         }}
         tabIndex={-1} // Make the Box focusable
+
       >
 
         {/* Tiptap Editor Content */}
@@ -187,8 +191,8 @@ const TipTapEditor = (props: Props) => {
                 <ColorPicker color={backgroundColor} handleColorChange={setBackgroundColorForATempSection}  />
             </Box>
             <Box mt={2}>
-              <Button onClick={handleDelete} variant="outlined" color="secondary" sx={{ ml: 2 }}>
-                Delete Content
+              <Button onClick={handleDelete} variant="outlined" color="error" sx={{ ml: 2 }}>
+                <DeleteIcon sx={{ margin: '0' }}  />
               </Button>
             </Box>
           </Box>
