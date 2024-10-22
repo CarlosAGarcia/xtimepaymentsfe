@@ -36,27 +36,30 @@ function a11yProps(index: number) {
 }
 
 const TabPanel = () => {
-  const [value, setValue] = useState<number>(0);
+  // on mount we send request to get the tiers and the tokens
+  // we have a loading state for each
+  // we have a error state for each
 
-  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
+  
+  const [tabActiveIndex, setTabActiveIndex] = useState<number>(0);
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabActiveIndex(newValue);
   };
 
   return (
       <>
-      <Tabs value={value} onChange={handleChange} aria-label="payment tiers/tokens tabs">
+      <Tabs value={tabActiveIndex} onChange={handleTabChange} aria-label="payment tiers/tokens tabs">
         <Tab label="TIERS" {...a11yProps(0)} />
         <Tab label="TOKENS" {...a11yProps(1)} />
       </Tabs>
 
-      <TabPanelInner value={value} index={0}>
+      <TabPanelInner value={tabActiveIndex} index={0}>
         {/* Content for TIERS tab */}
         <TierCardHorizontalList />
       </TabPanelInner>
 
-      <TabPanelInner value={value} index={1}>
+      <TabPanelInner value={tabActiveIndex} index={1}>
         {/* Content for TOKENS tab */}
-
       </TabPanelInner>
       </>
   );
