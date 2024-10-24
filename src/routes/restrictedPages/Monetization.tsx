@@ -8,12 +8,13 @@ import { Box } from '@mui/material'
 export default function Monetization() {
     // gets the user obejct from authContext
     const { user } = useAuth()
-    const { getOrganisationById, isGetOrganisationByIdLoading } = useOrganisation()
+    const { getOrganisationSubscriptions, getOrganisationById, isGetOrganisationByIdLoading } = useOrganisation()
 
     // on load and on every user.organisation._id change, fetch the organisation data with getOrganisationById and the id
     useEffect(() => {
         if (user?.organisation?._id && !isGetOrganisationByIdLoading) {
             getOrganisationById(user.organisation._id)
+            getOrganisationSubscriptions(user.organisation._id)
         }
     }, [user?.organisation?._id, getOrganisationById])
 

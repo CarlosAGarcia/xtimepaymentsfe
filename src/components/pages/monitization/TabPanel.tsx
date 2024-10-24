@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Tabs, Tab, Box, Typography } from '@mui/material';
 import TierCardHorizontalList from './TierCardHorizontalList';
+import { useOrganisation } from '../../../contexts/organisations/organisationContext';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -36,10 +37,8 @@ function a11yProps(index: number) {
 }
 
 const TabPanel = () => {
-  // on mount we send request to get the tiers and the tokens
-  // we have a loading state for each
-  // we have a error state for each
-
+  const { organisation } = useOrganisation()
+  const { SubscriptionTiersDisplayType, SubscriptionTiers } = organisation
   
   const [tabActiveIndex, setTabActiveIndex] = useState<number>(0);
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {

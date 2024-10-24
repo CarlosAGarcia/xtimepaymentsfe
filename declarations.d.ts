@@ -46,5 +46,18 @@ type SubscriptionTier = {
     isDeleted: boolean;
     freeTrialDays: number;
     validFrom: Date;
-    validUntil?: Date;
+    validUntil: Date;
+}
+
+type UserSubscriptionTier = {
+    user: any;
+    subscriptionTier: SubscriptionTier;
+    isActive: boolean;
+    isPaid: boolean;
+    validFrom: Date;
+    validUntil: Date;
+}
+
+type TokenCost = {
+
 }
