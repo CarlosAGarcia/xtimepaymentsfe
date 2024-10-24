@@ -57,3 +57,7 @@ type UserSubscriptionTier = {
     validFrom: Date;
     validUntil: Date;
 }
+
+type TokenCost = {
+
+}
